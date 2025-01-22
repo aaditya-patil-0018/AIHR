@@ -1,0 +1,50 @@
+{
+    "TechCorp": {
+        "1": {
+            "type": "Full-time",
+            "description": "HR Manager to oversee recruitment processes.",
+            "user_role": "HR Manager",
+            "status": "Closed",
+            "users_enrolled": 0
+        },
+        "2": {
+            "type": "Full-time",
+            "description": "HR Manager to oversee recruitment processes.",
+            "user_role": "HR Manager",
+            "status": "Open",
+            "users_enrolled": 0
+        },
+        "3": {
+            "type": "Full-Time",
+            "description": "Python developer, work on main website Requirements: Developer should have knowledge of Flask, Sqlite3 and pure python",
+            "user_role": "Software Engineer",
+            "status": "Open",
+            "users_enrolled": 0
+        }
+    },
+    "IDK": {
+        "1": {
+            "type": "Full-Time",
+            "description": "don't know bro Requirements: dk",
+            "user_role": "Something which idk",
+            "status": "Open",
+            "users_enrolled": 0
+        },
+        "2": {
+            "type": "Part-Time",
+            "description": "Must code fluently Requirements: Should have knowledge of python programming and should be good in communication",
+            "user_role": "Software Developer",
+            "status": "Closed",
+            "users_enrolled": 20
+        }
+    },
+    "WNS": {
+        "1": {
+            "type": "Full-Time",
+            "description": "Coder Requirements: Java Developers",
+            "user_role": "First Opening",
+            "status": "Open",
+            "users_enrolled": 0
+        }
+    }
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRAI | Complete Your Profile</title>
+    <link rel="icon" href="/static/images/logo.png" type="image/icon type">
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-100">
+
+    <!-- Main Wrapper with Vertical Margin -->
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-lg p-8 space-y-6 mt-12 mb-12">
+
+        <!-- Heading -->
+        <h1 class="text-3xl font-bold text-gray-800 text-center">Complete Your Profile</h1>
+        <p class="text-gray-600 text-center mb-6">Tell us more about yourself to enhance your experience.</p>
+        
+        <!-- Additional Information Form -->
+        <form action="/hr/registration" method="post" class="space-y-6">
+            
+            <!-- Email Input -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <input type="email" name="email" id="email" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="you@example.com">
+            </div>
+            
+            <!-- Name Input -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <input type="text" name="name" id="name" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="John Doe">
+            </div>
+            
+            <!-- Company Input with Autocomplete -->
+            <div>
+                <label for="company" class="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                 <!-- <input type="text" name="company" id="company" list="companyList" required  class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your Company"> -->
+                <select id="company" name="company" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    {% for i in data %}
+                        <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                    <!-- <option value="Global Solutions Inc."></option>
+                    <option value="Innovative Creations"></option> -->
+                </select>
+                <p class="text-sm text-gray-500 mt-1">Select from existing companies or add a new one.</p>
+            </div>
+            
+            <!-- Role Input -->
+            <div>
+                <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Your Role</label>
+                <input type="text" name="role" id="role" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="HR Manager">
+            </div>
+
+            <!-- Phone Number Input -->
+            <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <input type="tel" name="phone" id="phone" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="(123) 456-7890">
+            </div>
+
+            <!-- City and State Input -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                    <input type="text" name="city" id="city" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your City">
+                </div>
+                <div>
+                    <label for="state" class="block text-sm font-medium text-gray-700 mb-2">State</label>
+                    <input type="text" name="state" id="state" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your State">
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-3 rounded-lg hover:bg-indigo-700 transition-all duration-300 shadow-lg">
+                    Complete Registration
+                </button>
+            </div>
+
+        </form>
+        
+        <!-- Back to Login Link -->
+        <p class="text-sm text-gray-600 text-center">
+            Already completed? <a href="/hr/login" class="text-indigo-600 hover:underline">Log in here</a>
+        </p>
+    </div>
+
+</body>
+</html>

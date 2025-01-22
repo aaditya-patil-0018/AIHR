@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied</title>
+    <link rel="icon" href="/static/images/logo.png" type="image/icon type">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/output.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: #1a202c;
+        }
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards ease-in-out;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Button styling */
+        .btn {
+            background-color: #3182ce;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #f8fafc;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn:hover {
+            background-color: #2b6cb0;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-900 text-gray-100">
+
+    <!-- Main Content -->
+    <div class="text-center fade-in px-6 md:px-0">
+        <h1 class="text-5xl md:text-6xl font-bold text-red-500 mb-4">403</h1>
+        <h2 class="text-3xl md:text-4xl font-semibold mb-2">Access Denied</h2>
+        <p class="text-lg md:text-xl text-gray-400 mb-8">You don't have permission to view this page.</p>
+        <a href="/" class="btn hover:shadow-lg">
+            Return to Homepage
+        </a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,2 @@
+# using this command you can activate the conda evnvironment
+conda activate /opts/anaconda3/envs/condaenv

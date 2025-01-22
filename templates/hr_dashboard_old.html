@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRAI | HR Dashboard</title>
+    <link rel="icon" href="/static/images/logo.png" type="image/icon type">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/output.css">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards ease-in-out;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Slide-in animation for cards */
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(100px);
+            animation: slideInRight 1s forwards ease-in-out;
+        }
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        /* Button Hover Animation */
+        button:hover {
+            background-color: #1d4ed8;
+            transform: rotate(-2deg);
+        }
+        /* Underline Animation for Links */
+        .underline-link {
+            position: relative;
+        }
+        .underline-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            left: 0;
+            bottom: -2px;
+            background-color: #facc15;
+            transition: width 0.3s ease-in-out;
+        }
+        .underline-link:hover:after {
+            width: 100%;
+        }
+        /* Hover Effect for Cards */
+        .card:hover {
+            transform: scale(1.05);
+            background-color: #e0f2fe;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Wrapper -->
+    <div class="min-h-screen flex flex-col">
+
+        <!-- Navigation Bar -->
+        <header class="bg-stone-200 text-black py-4 px-6 shadow-md">
+            <nav class="container mx-auto flex justify-between items-center">
+                <h1 class="text-3xl font-bold tracking-wide">HRAI Dashboard</h1>
+                <ul class="flex space-x-6">
+                    <li><a href="/" class="hover:text-yellow-400 transition-colors duration-200 underline-link">Overview</a></li>
+                    <li><a href="#" class="hover:text-yellow-400 transition-colors duration-200 underline-link">Applicants</a></li>
+                    <li><a href="#" class="hover:text-yellow-400 transition-colors duration-200 underline-link">Settings</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 container mx-auto py-16 px-6 fade-in">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-8">HR Job Openings</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="job-list">
+                <!-- Add New Job Card -->
+                <div class="bg-white p-6 rounded-lg shadow-lg card cursor-pointer transition-all duration-300 slide-in-right"
+                    onclick="document.getElementById('jobFormModal').classList.remove('hidden');">
+                    <div class="flex flex-col items-center justify-center">
+                        <img src="/static/images/add-icon.png" class="w-12 mb-4" alt="Add Job Icon">
+                        <p class="text-lg font-semibold text-indigo-600">Add New Job Opening</p>
+                    </div>
+                </div>
+                <!-- Dynamic Job Cards will be injected here -->
+            </div>
+        </main>
+       
+        <!-- Job Opening Form Modal -->
+        <div id="jobFormModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center fade-in">
+            <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h2 class="text-xl font-bold mb-4">Add New Job Opening</h2>
+                <form action="/hr/add-job" method="POST" id="jobForm">
+                    <div class="mb-4">
+                        <label for="title" class="block text-gray-700 font-medium mb-2">Job Title</label>
+                        <input type="text" name="title" id="title" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="block text-gray-700 font-medium mb-2">Job Description</label>
+                        <textarea name="description" id="description" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="requirements" class="block text-gray-700 font-medium mb-2">Requirements</label>
+                        <textarea name="requirements" id="requirements" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg" onclick="document.getElementById('jobFormModal').classList.add('hidden');">Cancel</button>
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Create Job</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Close the modal when clicking outside
+        window.onclick = function(event) {
+            var modal = document.getElementById('jobFormModal');
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        }
+    
+        // Function to fetch and display job openings
+        async function fetchJobOpenings() {
+            try {
+                const response = await fetch('/hr/get-openings');
+                const data = await response.json();
+                const jobList = document.getElementById('job-list');
+    
+                // Clear existing job listings
+                jobList.innerHTML = '';
+    
+                // Add Add New Job Card
+                jobList.innerHTML += `
+                    <div class="bg-white p-6 rounded-lg shadow-lg card cursor-pointer transition-all duration-300 slide-in-right"
+                        onclick="document.getElementById('jobFormModal').classList.remove('hidden');">
+                        <div class="flex flex-col items-center justify-center">
+                            <img src="/static/images/add-icon.png" class="w-12 mb-4" alt="Add Job Icon">
+                            <p class="text-lg font-semibold text-indigo-600">Add New Job Opening</p>
+                        </div>
+                    </div>
+                `;
+    
+                // Check if the data is an array before iterating
+                if (Array.isArray(data)) {
+                    // Add job cards
+                    data.forEach((job, index) => {
+                        // Use the appropriate field (either 'title' or 'user_role') based on availability
+                        const jobTitle = job.title || job.user_role || "No Title Available";
+                        const jobApplicants = job.applicants || 0;
+                        const jobDescription = job.description || "No description available.";
+    
+                        jobList.innerHTML += `
+                            <div class="bg-white p-6 rounded-lg shadow-lg card cursor-pointer transition-all duration-300 slide-in-right">
+                                <div class="flex flex-col items-center">
+                                    <h3 class="text-xl font-semibold text-gray-700">${jobTitle}</h3>
+                                    <p class="text-md text-gray-500 mt-2">${jobApplicants} Applicants</p>
+                                    <p class="text-sm text-gray-400 mt-2">${jobDescription}</p>
+                                    <button onclick="deleteJob(${index})" class="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg">Delete</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    console.error('Expected an array, but received:', data);
+                    jobList.innerHTML = '<p>No job openings available at the moment.</p>';
+                }
+    
+            } catch (error) {
+                console.error('Error fetching job openings:', error);
+                const jobList = document.getElementById('job-list');
+                jobList.innerHTML = '<p>Error loading job openings. Please try again later.</p>';
+            }
+        }
+    
+        // Fetch job openings on page load
+        window.onload = fetchJobOpenings;
+    </script>

@@ -1,0 +1,17 @@
+{
+    "1": {
+        "name": "",
+        "email": "",
+        "phone": "",
+        "location": "",
+        "skills": []
+    },
+    "12": {
+        "name": "Example User",
+        "email": "example@gmail.com",
+        "phone": "9876543210",
+        "location": "Pune",
+        "skills": "Python, Java, JavaScript, Something, Else, Etc.",
+        "resume_path": "uploads/12_resume.pdf"
+    }
+}

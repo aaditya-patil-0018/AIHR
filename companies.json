@@ -1,0 +1,34 @@
+{
+    "TechCorp": {
+        "type": "Technology",
+        "website": "https://www.techcorp.com",
+        "company_description": "Innovative tech solutions provider",
+        "company_size": "200-500",
+        "city": "San Francisco",
+        "state": "CA"
+    },
+    "new test company": {
+        "type": "Technology",
+        "website": "https://www.techcorp.com",
+        "company_description": "Innovative tech solutions provider",
+        "company_size": "20",
+        "city": "nashik",
+        "state": "mh"
+    },
+    "IDK": {
+        "type": "Technology",
+        "website": "https://www.idk.com",
+        "company_description": "I DON'T KNOW BIGGEST TECH COMPANY",
+        "company_size": "9999999999999999",
+        "city": "YOU DON'T KNOW",
+        "state": "I DON'T KNOW"
+    },
+    "WNS": {
+        "type": "Technology",
+        "website": "https://wns.com",
+        "company_description": "World network system | Software Company | India Based Company",
+        "company_size": "250",
+        "city": "Nashik",
+        "state": "Maharashtra"
+    }
+}

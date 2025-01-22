@@ -1,0 +1,24 @@
+{
+    "TechCorp": [
+        {
+            "title": "something",
+            "description": "something",
+            "requirements": "something\r\n",
+            "applicants": 0
+        },
+        {
+            "type": "Full-time",
+            "description": "HR Manager to oversee recruitment processes.",
+            "user_role": "HR Manager",
+            "status": "Open",
+            "users_enrolled": 0
+        },
+        {
+            "type": "Full-time",
+            "description": "HR Manager to oversee recruitment processes.",
+            "user_role": "HR Manager",
+            "status": "Open",
+            "users_enrolled": 0
+        }
+    ]
+}
