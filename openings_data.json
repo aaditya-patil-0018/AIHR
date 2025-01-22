@@ -20,6 +20,13 @@
             "user_role": "Software Engineer",
             "status": "Open",
             "users_enrolled": 0
+        },
+        "4": {
+            "type": "Full-Time",
+            "description": "Business Analyst, Fresher, Shoulder be open to Youth and GenZ language. Creative ideas and market research. Requirements: Business minded",
+            "user_role": "Assistant",
+            "status": "Open",
+            "users_enrolled": 0
         }
     },
     "IDK": {

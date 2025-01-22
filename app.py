@@ -397,7 +397,11 @@ def applicant_qna(companyname, listingid):
         data = data[companyname][listingid]
         q = QnA(job_title=data["user_role"], job_description=data["description"])
         question_asked = []
-        for i in range(5):
+
+        #question to ask
+        question_to_ask = 5
+
+        for i in range(question_to_ask):
             quest = q.generate_question(question_asked)
             print(quest)
             question_asked.append(quest['question'])
