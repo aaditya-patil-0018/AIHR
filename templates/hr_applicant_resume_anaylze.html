@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <div class="container mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Resume Analysis Report</h1>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Rating</h2>
+            <p class="text-lg text-gray-600">Rating: <span class="font-bold">{{data["rating"]}}/10</span></p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Strengths</h2>
+            <ul class="list-disc list-inside text-gray-600">
+               {% for i in data["strengths"] %}
+                    <li>{{ i }}</li>
+               {% endfor %}
+            </ul>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Weaknesses</h2>
+            <ul class="list-disc list-inside text-gray-600">
+                {% for i in data["weaknesses"] %}
+                    <li>{{ i }}</li>
+               {% endfor %}
+            </ul>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Recommendation</h2>
+            <p class="text-gray-600">
+                {{ data["recommendation"] }}
+            </p>
+        </section>
+    </div>
+
+</body>
+</html>

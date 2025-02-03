@@ -88,46 +88,46 @@
         <main class="flex-1 container mx-auto py-16 px-6 fade-in">
             <h2 class="text-3xl font-semibold text-gray-800 mb-8">HR Job Openings</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="job-list">
-                <!-- Dynamic Job Cards will be injected here -->
-                {% for i in data %}
-                    <a href="/hr/applicants/{{company}}/{{i}}">
-                        <div class="bg-white p-6 rounded-lg shadow-lg card cursor-pointer transition-all duration-300 slide-in-right">
-                            <div class="flex flex-col justify-center">
-                                <p class="text-lg font-semibold text-indigo-600">{{data[i]['user_role']}}</p>
-                                <p class="text-gray-500">
-                                    {{data[i]['type']}} 
-                                    | 
-                                    {% if data[i]['status'] == 'Open' %}
-                                        <span class="text-green-600">
-                                    {% else %}    
-                                        <span class="text-red-600">
-                                    {% endif %}
-                                        {{data[i]['status']}}
-                                    </span> 
-                                    | 
-                                    <span class="text-black">
-                                        {% if data[i]['users_enrolled'] == 0 %}
-                                            {{data[i]['users_enrolled']}}
-                                        {% endif %}
-                                        {% if data[i]['users_enrolled'] != 0 %}
-                                            {{data[i]['users_enrolled'] | length}}
-                                        {% endif %}
-                                    </span>
-                                </p>
-                                <p class="mt-2">{{data[i]["description"]}}</p>
-                            </div>
-                        </div>
-                    </a>
-                {% endfor %}
-
-                <!-- Add New Job Card -->
-                <div class="bg-white p-6 rounded-lg shadow-lg card cursor-pointer transition-all duration-300 slide-in-right"
-                    onclick="document.getElementById('jobFormModal').classList.remove('hidden');">
-                    <div class="flex flex-col items-center justify-center">
-                        <img src="/static/images/add-icon.png" class="w-12 mb-4" alt="Add Job Icon">
-                        <p class="text-lg font-semibold text-indigo-600">Add New Job Opening</p>
-                    </div>
+            <div>
+                <p class=""><span class="font-bold">Type:</span> {{data['type']}}</p>
+                <p class="mt-4"><span class="font-bold">Description:</span> {{data['description']}}</p>
+                <p class="mt-4"><span class="font-bold">User Role:</span> {{data['user_role']}}</p>
+                <p class="mt-4"><span class="font-bold">Status:</span> {{data['status']}}</p>   
+                <!-- users_enrolled -->
+                 <!-- {% for i in data["users_enrolled"] %}
+                    <p>{{users_data[i]['name']}}</p>
+                 {% endfor %} -->
+                 <!-- Table for Users Enrolled -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">Users Enrolled</h3>
+                    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                        <thead>
+                            <tr class="bg-gray-800 text-white">
+                                <!-- <th class="py-3 px-4 text-left">#</th> -->
+                                <th class="py-3 px-4 text-left">Name</th>
+                                <th class="py-3 px-4 text-left">Email</th>
+                                <th class="py-3 px-4 text-left">Phone</th>
+                                <th class="py-3 px-4 text-left">Location</th>
+                                <th class="py-3 px-4 text-left">Skills</th>
+                                <th class="py-3 px-4 text-left">Rating</th>
+                                <th class="py-3 px-4 text-left">Check</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in data["users_enrolled"] %}
+                                <tr class="border-b hover:bg-gray-100">
+                                    <!-- <td class="py-3 px-4">{{ loop.index }}</td> -->
+                                    <td class="py-3 px-4">{{ users_data[user].name }}</td>
+                                    <td class="py-3 px-4">{{ users_data[user].email }}</td>
+                                    <td class="py-3 px-4">{{ users_data[user].phone }}</td>
+                                    <td class="py-3 px-4">{{ users_data[user].location }}</td>
+                                    <td class="py-3 px-4">{{ users_data[user].skills }}</td>
+                                    <td class="py-3 px-4">{{ resume_data[user].rating }}/10</td>
+                                    <td class="py-3 px-4"><button class="text-white bg-blue-950 p-4" onclick="window.location='/hr/applicants/resume_analyze/{{user}}'">Check</button></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>

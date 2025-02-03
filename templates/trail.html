@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech Transcription</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      background: #f3f4f6;
+      color: #333;
+      padding: 50px;
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #4CAF50;
+    }
+    #transcription {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #555;
+      border: 2px solid #ddd;
+      padding: 15px;
+      background: #ffffff;
+      border-radius: 8px;
+      display: inline-block;
+      max-width: 600px;
+      word-wrap: break-word;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 1.1em;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s;
+      margin: 10px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Speech Transcription</h1>
+  <button onclick="startListening()">Start Listening</button>
+  <button onclick="stopListening()">Stop Listening</button>
+  <p id="transcription">Your speech will appear here...</p>
+
+  <script>
+    let recognition;
+
+    function startListening() {
+      const transcriptionElement = document.getElementById("transcription");
+      transcriptionElement.innerText = "Listening... Please speak.";
+
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.continuous = true;
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        transcriptionElement.innerText = transcript;
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error: ", event.error);
+        transcriptionElement.innerText = "Error: " + event.error;
+      };
+
+      recognition.start();
+    }
+
+    function stopListening() {
+      if (recognition) {
+        recognition.stop();
+        document.getElementById("transcription").innerText = "Stopped listening.";
+      }
+    }
+  </script>
+</body>
+</html>

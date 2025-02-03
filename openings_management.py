@@ -29,6 +29,17 @@ class Openings:
             data = json.load(f)
         return data[company][opening_id]
     
+    def enroll_user(self, userid, company, opening_id):
+        with open(self.file, 'r') as f:
+            data = json.load(f)
+        if data[company][opening_id]["users_enrolled"] != 0:
+            data[company][opening_id]["users_enrolled"].append(userid)
+        else:
+            data[company][opening_id]["users_enrolled"] = [userid]
+        with open(self.file, 'w') as f:
+            json.dump(data, f, indent=4)
+        return True
+    
     def create_opening(self, company, d):
         with open(self.file, 'r') as f:
             data = json.load(f)

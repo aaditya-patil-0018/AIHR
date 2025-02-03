@@ -6,7 +6,7 @@ class QnA:
 
     def __init__(self, job_title, job_description):
         # storing our api key
-        self.api_key = "AIzaSyCgQMrldhKd6mBKyoI206BRLKtHL5m0MDQ"
+        self.api_key = "AIzaSyBm3tp-_rKmye6dj7FdhrsLYVAPHd8Pm2g"
         # creating the gemini object
         genai.configure(api_key=self.api_key)
         # choosing the model of gemini
@@ -29,11 +29,12 @@ class QnA:
     def analyse_response(self, data):
         response = self.model.start_chat(
             history=[
-                {"role": "user", "parts": "You are a psychologist who generates the analysis of the user's brain dominance based on the answers they give over the questions asked,"}
+                {"role": "user", "parts": "You are a very expert HR who an evaluate the candidates based on their answes to the questions."}
             ]
         )
-        response = response.send_message(f"Tell me which part of the user is dominat: Right or Left. Based on the Questions Answered: {self.data}")
+        response = response.send_message(f"Please analyze the questions answers and give me the wheter we should hire or no in a single word. {self.data} . I don't want a huge answer only a single word response either yes or no")
         print(response)
+        return response.text
 
 if __name__ == "__main__":
     print("hello world!")

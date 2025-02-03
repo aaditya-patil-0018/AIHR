@@ -40,14 +40,23 @@
             </div>
             <div>
                 <p class="text-gray-600 text-sm font-medium">Applicants Enrolled:</p>
-                <p class="text-lg font-semibold text-gray-800">{{data["users_enrolled"]}}</p>
+                <p class="text-lg font-semibold text-gray-800">{{data["users_enrolled"]|length}}</p>
             </div>
         </div>
-        <div class="mt-6">
-            <button class="w-full bg-blue-900 text-white py-2 rounded-lg hover:bg-blue-800 transition" onclick="location.href='/applicant/qna/{{companyname}}/{{listingid}}';">
-                Apply Now
-            </button>
-        </div>
+        {% if uid in data["users_enrolled"] %}
+            <div class="mt-6">
+                <button class="w-full bg-gray-700 text-white py-2 rounded-lg transition">
+                    Applied
+                </button>
+            </div>
+        {% endif %}
+        {% if uid not in data["users_enrolled"] %}
+            <div class="mt-6">
+                <button class="w-full bg-blue-900 text-white py-2 rounded-lg hover:bg-blue-800 transition" onclick="location.href='/applicant/qna/{{companyname}}/{{listingid}}';">
+                    Apply Now
+                </button>
+            </div>
+        {% endif %}
     </div>
 </body>
 </html>

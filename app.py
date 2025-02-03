@@ -189,7 +189,7 @@ def hr_dashboard():
                 "description": description,
                 "user_role": user_role,
                 "status": "Open",
-                "users_enrolled": 0
+                "users_enrolled": []
             }
             opening_data = Openings()
             company = session['company']
@@ -198,6 +198,23 @@ def hr_dashboard():
             # return "post method evoked!"
     else:
         return redirect(url_for('hr_registration'))
+    
+@app.route("/hr/applicants/<companyname>/<listingid>")
+def hr_applicants(companyname, listingid):
+    if session["company"] != "":
+        opening_data = Openings()  # Ensure the openings data file exists
+        company = session['company']
+        data = opening_data.get_opening(company=company, opening_id=listingid)
+        users_data = read_json("users.json")
+        resume_data = read_json("resume_analyze.json")
+        return render_template('hr_dashboard_applicant.html', data=data, company=company, users_data=users_data, resume_data=resume_data)
+    else:
+        return redirect(url_for('hr_registration'))
+
+@app.route("/hr/applicants/resume_analyze/<userid>")
+def hr_applicant_resume_analyze(userid):
+    resume_data = read_json("resume_analyze.json")[userid]
+    return render_template("hr_applicant_resume_anaylze.html", data=resume_data)
 
 @app.route("/hr/registration", methods=["GET", "POST"])
 def hr_registration():
@@ -284,7 +301,7 @@ def applicant_signup():
             if user.signup(email, password, usertype):
                 session[usertype] = True
                 session["user-email"] = email
-                return redirect("/applicant/slide")
+                return redirect('/applicant/dashboard')
             else:
                 session[usertype] = False
                 session["user-email"] = ""
@@ -328,14 +345,31 @@ def applicant_logout():
 def applicant_details():
     if session["applicant"] == True:
         if request.method == "GET":
-            return render_template("applicant_details.html", email=session["user-email"])
+            u = Users()
+            uid = str(u.get_id(session["user-email"]))
+            json_data = read_json("users.json")
+            
+            if str(uid) in [i for i in json_data]:
+                return render_template("applicant_details.html", email=session["user-email"], data=json_data[uid])
+            else:
+                data = {
+                "name": "",
+                "email": "",
+                "phone": "",
+                "location": "",
+                "skills": "",
+                "enrolled": []
+            }
+                return render_template("applicant_details.html", email=session["user-email"], data=data)
+           
         elif request.method == "POST":
             data = {
                 "name": request.form.get("name"),
                 "email": request.form.get("email"),
                 "phone": request.form.get("phone"),
                 "location": request.form.get("location"),
-                "skills": request.form.get("skills")
+                "skills": request.form.get("skills"),
+                "enrolled": []
             }
             user_resume = request.files.get("resume")
 
@@ -364,8 +398,26 @@ def applicant_details():
             
             # Save user data to JSON file
             json_data = read_json("users.json")
-            json_data[uid] = data
-            write_json("users.json", json_data)
+            if str(uid) in [i for i in json_data]:
+                json_data[str(uid)]["name"] = data["name"]
+                json_data[str(uid)]["email"] = data["email"]
+                json_data[str(uid)]["phone"] = data["phone"]
+                json_data[str(uid)]["location"] = data["location"]
+                json_data[str(uid)]["skills"] = data["skills"]
+                json_data[str(uid)]["enrolled"] = json_data[str(uid)]["enrolled"]
+                write_json("users.json", json_data)
+            else:
+                json_data[str(uid)] = data
+                write_json("users.json", json_data)
+            
+            # analyze the resume here and store the data in resume_analyze.json
+            r = ResumeAnalyzer()
+            t = r.extract_text(save_path)
+            d = r.analyze(t)
+
+            r_data = read_json("resume_analyze.json")
+            r_data[str(uid)] = d
+            write_json("resume_analyze.json", r_data)
 
             return redirect(url_for("applicant_dashboard"))
     else:
@@ -385,7 +437,11 @@ def applicant_slide(companyname, listingid):
         openings = Openings()
         data = openings.get_all()
         data = data[companyname][listingid]
-        return render_template("applicant_slide.html", heading=heading, para=para, data=data, companyname=companyname, listingid=listingid)
+        # users database
+        u = Users()
+        # print(session["user-email"])
+        uid = str(u.get_id(session["user-email"]))
+        return render_template("applicant_slide.html", heading=heading, para=para, data=data, companyname=companyname, listingid=listingid, uid=uid)
     else:
         return redirect(url_for("applicant_login"))
 
@@ -410,28 +466,86 @@ def applicant_qna(companyname, listingid):
         for i in question_asked:
             questions[c] = i
             c+=1
+
+        # users database
+        u = Users()
+        # print(session["user-email"])
+        uid = u.get_id(session["user-email"])
+
+        json_data = read_json("users.json")
+        # print(json_data)
+        questi = {}
+        for question in questions:
+            questi[questions[question]] = "" 
+        # print(questi)
+        json_data[str(uid)]["enrolled"][companyname] = {listingid: questi}
+        write_json("users.json", json_data)
+
+        openings.enroll_user(str(uid), companyname, listingid)
+
         return render_template("applicant_qna.html", questions=questions, companyname=companyname, listingid=listingid)
     elif request.method == "POST":
-        return redirect(url_for("video_interview"))
+        # users database
+        u = Users()
+        # print(session["user-email"])
+        uid = u.get_id(session["user-email"])
 
-@app.route('/applicant/submit-answer', methods=["POST"])
-def applicant_submit():
-    if request.method == "POST":
-        data = {
-            "1": {
-                "question": "Tell us about a time when you faced a challenge at work and how you overcame it.",
-                "answer": request.form.get("answer1")
-            },
-            "2": {
-                "question": "Describe a time when you had to work in a team to achieve a goal. How did you contribute?",
-                "answer": request.form.get("answer2")
-            }
-        }
-        return data
+        ans = []
+        for i in request.form:
+            ans.append(request.form.get(i))
 
-@app.route('/applicant/video_interview')
-def video_interview():
-    return render_template("video_interview.html")
+        json_data = read_json("users.json")
+        # print(questi)
+        for i, j in zip(json_data[str(uid)]["enrolled"][companyname][listingid], ans):
+            json_data[str(uid)]["enrolled"][companyname][listingid][i] = j
+        
+        write_json("users.json", json_data)
+        # return redirect(f"/applicant/submit-answer/{companyname}/{listingid}", code=307)
+        return redirect(f"applicant/video_interview/{companyname}/{listingid}")
+
+# @app.route('/applicant/submit-answer/<companyname>/<listingid>', methods=["POST"])
+# def applicant_submit(companyname, listingid):
+#     if request.method == "POST":
+#         data = {
+#             "1": {
+#                 "question": "Tell us about a time when you faced a challenge at work and how you overcame it.",
+#                 "answer": request.form.get("answer1")
+#             },
+#             "2": {
+#                 "question": "Describe a time when you had to work in a team to achieve a goal. How did you contribute?",
+#                 "answer": request.form.get("answer2")
+#             }
+#         }
+#         return redirect(url_for("video_interview"))
+
+@app.route('/applicant/video_interview/<companyname>/<listingid>')
+def video_interview(companyname, listingid):
+    questions = ["tell me your name?", "why are you applying for job?", "where do you see yourself 5 years from now?"]
+    return render_template("video_interview.html", questions=questions, companyname=companyname, listingid=listingid)
+
+@app.route('/applicant/save_interview_data/<companyname>/<listingid>', methods=['POST'])
+def save_interview_data(companyname, listingid):
+    data = request.json
+    average_emotion = data.get('averageEmotion')
+    answers = data.get('answers')
+    users_data = read_json("users.json")
+    # users database
+    u = Users()
+    # print(session["user-email"])
+    uid = u.get_id(session["user-email"])
+    users_data[str(uid)]["enrolled"][companyname][listingid]["average_emotion"] = average_emotion
+    users_data[str(uid)]["enrolled"][companyname][listingid]["video_interview_answers"] = answers
+
+    openings = Openings()
+    data = openings.get_all()
+    data = data[companyname][listingid]
+    q = QnA(job_title=data["user_role"], job_description=data["description"])
+    recommend = q.analyse_response(users_data[str(uid)]["enrolled"][companyname][listingid])
+    users_data[str(uid)]["enrolled"][companyname][listingid]["recommend"] = recommend
+    write_json("users.json", users_data)
+    # Save data to database
+    print(f"Average Emotion: {average_emotion}, Answers: {answers}")
+    return jsonify({"status": "success"})
 
 # Set up logging for better error tracking
 logging.basicConfig(level=logging.DEBUG)
@@ -467,6 +581,11 @@ def analyze():
     except Exception as e:
         logging.error(f"Error occurred during emotion analysis: {e}")
         return jsonify({"error": str(e)}), 500
+    
+
+# @app.route('/trail')
+# def trail():
+#     return render_template('trail.html')
 
 # @app.route("/applicant/resume")
 # def resume():

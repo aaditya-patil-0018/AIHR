@@ -156,7 +156,7 @@ if __name__ == "__main__":
         "description": "HR Manager to oversee recruitment processes.",
         "user_role": "HR Manager",
         "status": "Open",
-        "users_enrolled": 0
+        "users_enrolled": []
     }
     hr_manager.create_opening("TechCorp", job_data)
 

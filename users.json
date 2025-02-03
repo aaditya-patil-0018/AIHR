@@ -4,14 +4,51 @@
         "email": "",
         "phone": "",
         "location": "",
-        "skills": []
+        "skills": [],
+        "enrolled": {}
     },
     "12": {
-        "name": "Example User",
+        "name": "Example",
         "email": "example@gmail.com",
-        "phone": "9876543210",
+        "phone": "9999888810",
         "location": "Pune",
         "skills": "Python, Java, JavaScript, Something, Else, Etc.",
-        "resume_path": "uploads/12_resume.pdf"
+        "resume_path": "uploads/12_resume.pdf",
+        "enrolled": {
+            "IDK": {
+                "1": {
+                    "Can you describe a situation where you had to debug a particularly obscure software error, and what specific strategies or tools you employed to resolve it": "Hello",
+                    "Describe your experience with memory management in [Specific Programming Language relevant to the unknown job].  Give a concrete example of a memory leak you encountered and how you resolved it": "World",
+                    "Describe a time you optimized a database query for performance. What tools did you use and what was the performance gain": "How",
+                    "[    Explain your experience with garbage collection in Java, specifically addressing scenarios where it might negatively impact performance and how you'd mitigate those issues.,    How would you approach designing a RESTful API endpoint that handles a high volume of concurrent requests, ensuring scalability and data consistency?,    Describe your experience with asynchronous programming paradigms (e.g., callbacks, promises, async/await).  Give a specific example where utilizing these enhanced the efficiency or responsiveness of an application.,    If you were tasked with integrating a legacy system with a modern microservices architecture, what challenges do you foresee and how would you approach them?,    Compare and contrast different database indexing strategies (e.g., B-trees, hash indexes). When would you choose one over the other?,    Walk me through your understanding of different software design patterns (e.g., Singleton, Factory, Observer).  Provide a practical application of one in a past project.,    Explain your approach to version control using Git, focusing on branching strategies and collaborative workflows.,    Describe your familiarity with different testing methodologies (e.g., unit testing, integration testing, end-to-end testing).  How would you prioritize testing efforts in a time-constrained environment?,    How would you troubleshoot a network connectivity issue impacting application performance?  What tools would you use?,    Describe your experience with containerization technologies (e.g., Docker, Kubernetes). How have you used them to improve deployment efficiency or scalability?  ": "Are",
+                    "[    Explain the difference between a process and a thread.,    How would you handle a deadlock situation in a multi-threaded application?,    Describe your experience with different types of database transactions (e.g., ACID properties).,    What are the trade-offs between using a relational database vs. a NoSQL database?,    How familiar are you with different message queues (e.g., Kafka, RabbitMQ)?,    Describe your understanding of caching strategies (e.g., LRU, FIFO).,    How would you implement rate limiting in an API?,    What are some common security vulnerabilities in web applications, and how can they be mitigated?,    Explain your experience with different authentication and authorization mechanisms.,    Describe your understanding of different load balancing strategies.,    What are your preferred tools for monitoring application performance?,    How would you approach designing a system for handling large volumes of data?,    Explain your experience with different data serialization formats (e.g., JSON, XML, Protocol Buffers).,    How do you ensure code quality and maintainability in your projects?,    Describe a time you had to work with a poorly documented codebase.  How did you approach it?,    Describe your understanding of different software development methodologies (e.g., Agile, Waterfall).  ": "you",
+                    "average_emotion": "Confidence",
+                    "video_interview_answers": [
+                        {
+                            "question": "tell me your name?",
+                            "answer": "I am Aditya"
+                        },
+                        {
+                            "question": "why are you applying for job?",
+                            "answer": "I need a book"
+                        },
+                        {
+                            "question": "where do you see yourself 5 years from now?",
+                            "answer": "I see you"
+                        }
+                    ],
+                    "recommend": "Please provide the questions and answers.\n"
+                }
+            },
+            "TechCorp": {
+                "3": {
+                    "Describe a scenario where you'd choose SQLAlchemy over raw SQLite3 interactions in a Flask application, and why": "",
+                    "How would you handle a large SQLite3 database file in a Flask application to prevent performance bottlenecks, considering the limitations of SQLite3's locking mechanism": "",
+                    "Explain how you would implement database migrations in a Flask application using SQLite3, ensuring data integrity during updates": "",
+                    "How would you optimize a Flask route that performs a complex query on a large SQLite3 database table, minimizing database load and improving response time": "",
+                    "[    Explain the differences between `fetchone()`, `fetchall()`, and `fetchmany()` in SQLite3 and when you would use each.,    How would you structure your Flask application's database interactions to promote testability, ensuring efficient unit and integration tests?,    Describe a situation where you needed to debug a slow-running SQLite3 query within a Flask application and what strategies you used to identify and resolve the performance issue.,    How would you handle potential race conditions when multiple users concurrently access and modify data in your SQLite3 database within a Flask application?,    Explain how you would implement error handling in your Flask application's database interactions, specifically for SQLite3 exceptions.,    How would you design a Flask application's database schema using SQLite3 to efficiently store and retrieve hierarchical data (e.g., a tree-like structure)?,    Describe your preferred method for managing database transactions in a Flask application using SQLite3 to maintain data consistency.,    How would you approach securing sensitive data stored in a SQLite3 database within a Flask application?,    What are the trade-offs of using SQLite3 versus a more robust database system like PostgreSQL in a Flask application, and under what conditions would you favor one over the other?,    Explain how you would integrate Flask-Migrate or a similar tool into a Flask/SQLite3 project, demonstrating your understanding of database migration best practices.  ": ""
+                }
+            }
+        }
     }
 }
