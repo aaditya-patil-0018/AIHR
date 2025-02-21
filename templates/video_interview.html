@@ -5,65 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Interview</title>
-    <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background: #0f172a;
-            color: #e2e8f0;
-            font-family: 'Poppins', sans-serif;
-        }
-        .glass-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn {
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-        }
-    </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen px-4">
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg max-w-lg w-full">
+        <h1 class="text-3xl font-semibold text-center mb-6">Video Interview</h1>
 
-    <div class="glass-container max-w-lg w-full text-center">
-        <h1 class="text-3xl font-semibold mb-6">Video Interview</h1>
-
-        <div class="relative w-full h-80 bg-gray-800 rounded-lg overflow-hidden mb-4">
-            <video id="videoElement" autoplay class="w-full h-full object-cover"></video>
-            <div id="loading" class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 text-white text-xl font-bold">
+        <div class="relative w-full h-80 bg-gray-700 rounded-lg overflow-hidden mb-4">
+            <video id="videoElement" autoplay class="w-full h-full object-cover rounded-lg"></video>
+            <div id="loading" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-xl font-bold rounded-lg">
                 Loading camera...
             </div>
         </div>
 
-        <p id="emotionText" class="text-lg text-gray-300 mb-4">Waiting for question...</p>
+        <p class="text-center text-lg mb-2">Time Left: <span id="timer" class="font-bold">2:00</span></p>
+        <p id="emotionText" class="text-lg text-center mb-4">Waiting for question...</p>
 
         <div class="flex justify-center gap-4">
-            <button id="startButton" class="btn bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600">
-                Start Interview
-            </button>
-            <button id="stopButton" class="btn bg-red-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600">
-                Stop Listening
-            </button>
+            <button id="startButton" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Start Interview</button>
+            <button id="stopButton" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">Stop Interview</button>
         </div>
 
-        <p id="answerText" class="text-lg mt-4 text-gray-300"></p>
+        <p id="answerText" class="text-lg mt-4 text-center"></p>
     </div>
 
     <script>
-        let recognition;
+        let recognition, timerInterval;
         const questions = {{ questions | tojson }};
         const companyname = {{ companyname | tojson }};
         const listingid = {{ listingid | tojson }};
         let currentQuestionIndex = 0;
         const emotionsData = [];
         const answersList = [];
+        let timeLeft = 120; // 2 minutes in seconds
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById("timer").innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft <= 0) stopInterview();
+            timeLeft--;
+        }
+
+        function startTimer() {
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
 
         function speakText(text) {
             const utterance = new SpeechSynthesisUtterance(text);
@@ -95,23 +83,24 @@
                 setTimeout(askQuestion, 2000);
             };
 
-            recognition.onerror = (event) => {
-                console.error("Speech recognition error:", event.error);
-            };
-
             recognition.start();
         }
 
         async function startCamera() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const videoElement = document.getElementById('videoElement');
+                document.getElementById('videoElement').srcObject = stream;
                 document.getElementById('loading').style.display = 'none';
-                videoElement.srcObject = stream;
             } catch (err) {
-                console.error('Error accessing the camera:', err);
                 alert('Camera access denied or failed.');
             }
+        }
+
+        function stopInterview() {
+            clearInterval(timerInterval);
+            if (recognition) recognition.stop();
+            document.getElementById('emotionText').innerText = "Interview ended.";
+            postInterviewData();
         }
 
         async function postInterviewData() {
@@ -137,20 +126,14 @@
             }
         }
 
-        function stopListening() {
-            if (recognition) {
-                recognition.stop();
-                document.getElementById('emotionText').innerText = "Listening stopped.";
-                postInterviewData();
-            }
-        }
-
         window.onload = function () {
             startCamera();
-            document.getElementById('startButton').onclick = askQuestion;
-            document.getElementById('stopButton').onclick = stopListening;
+            document.getElementById('startButton').onclick = function () {
+                askQuestion();
+                startTimer();
+            };
+            document.getElementById('stopButton').onclick = stopInterview;
         };
     </script>
-
 </body>
 </html>
