@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRAI | Signup</title>
+    <link rel="icon" href="/static/images/logo.png" type="image/icon type">
+   <!-- Google Fonts: Poppins -->
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+   <!-- TailwindCSS -->
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+</head>
+<body class="flex bg-black m-4" style="height: 100vh;">
+    <div class="flex-1 flex items-center justify-center bg-purple-600 rounded-xl p-8" style="height: 96vh;">
+        <h1 class="text-black leading-normal text-5xl font-bold">With <span class="text-white">AIHR {{usertype}}</span> ease their task and get more time building stronger teams.</h1>
+    </div>
+
+    <div class="flex-1 flex items-center justify-center" style="height: 100vh;">
+        <div class="flex flex-col">
+            <!-- Heading -->
+            <h1 class="text-4xl font-bold mb-6 text-white">Create Your Account</h1>
+            <p class="text-gray-200 mb-12">Join us to streamline your HR experience with modern tools.</p>
+            
+            <!-- Signup Form -->
+            <form action="/{{usertype}}/signup" method="post" class="space-y-8">
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-200 mb-2">Email Address</label>
+                    <input type="email" name="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="you@example.com" required>
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-200 mb-2">Password</label>
+                    <input type="password" name="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="••••••••" required>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <input type="submit" value="Sign Up" class="w-full bg-purple-600 text-white font-medium py-3 rounded-lg hover:bg-indigo-700 transition-all duration-300 cursor-pointer shadow-lg">
+                </div>
+            </form>
+
+            <!-- Login Redirect -->
+            <p class="text-sm text-gray-600 mt-4">Already have an account? 
+                <a href="/{{usertype}}/login" class="text-purple-600 hover:underline">Log In</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

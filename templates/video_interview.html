@@ -7,34 +7,53 @@
     <title>Video Interview</title>
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Poppins', sans-serif;
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen px-4">
 
-    <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
-        <h1 class="text-3xl font-semibold text-center text-gray-800 mb-6">Video Interview</h1>
+    <div class="glass-container max-w-lg w-full text-center">
+        <h1 class="text-3xl font-semibold mb-6">Video Interview</h1>
 
-        <div class="relative w-full h-80 bg-gray-200 rounded-lg overflow-hidden mb-4">
-            <video id="videoElement" autoplay class="w-full h-full object-cover rounded-lg"></video>
-            <div id="loading" class="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 text-white text-xl font-bold rounded-lg">
+        <div class="relative w-full h-80 bg-gray-800 rounded-lg overflow-hidden mb-4">
+            <video id="videoElement" autoplay class="w-full h-full object-cover"></video>
+            <div id="loading" class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 text-white text-xl font-bold">
                 Loading camera...
             </div>
         </div>
 
-        <div class="text-center mb-4">
-            <p id="emotionText" class="text-lg text-gray-700 mb-4">Waiting for question...</p>
-        </div>
+        <p id="emotionText" class="text-lg text-gray-300 mb-4">Waiting for question...</p>
 
         <div class="flex justify-center gap-4">
-            <button id="startButton" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
+            <button id="startButton" class="btn bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600">
                 Start Interview
             </button>
-            <button id="stopButton" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">
+            <button id="stopButton" class="btn bg-red-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600">
                 Stop Listening
             </button>
         </div>
 
-        <p id="answerText" class="text-lg mt-4 text-gray-700"></p>
+        <p id="answerText" class="text-lg mt-4 text-gray-300"></p>
     </div>
 
     <script>
@@ -43,14 +62,14 @@
         const companyname = {{ companyname | tojson }};
         const listingid = {{ listingid | tojson }};
         let currentQuestionIndex = 0;
-        const emotionsData = []; // Store detected emotions
-        const answersList = []; // Store all answers
-    
+        const emotionsData = [];
+        const answersList = [];
+
         function speakText(text) {
             const utterance = new SpeechSynthesisUtterance(text);
             speechSynthesis.speak(utterance);
         }
-    
+
         function askQuestion() {
             if (currentQuestionIndex < questions.length) {
                 const question = questions[currentQuestionIndex];
@@ -61,97 +80,55 @@
                 document.getElementById('emotionText').innerText = "Interview complete. Thank you!";
             }
         }
-    
+
         function startListening() {
             recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = 'en-US';
             recognition.interimResults = false;
             recognition.continuous = false;
-    
+
             recognition.onresult = (event) => {
                 const answer = event.results[0][0].transcript;
                 document.getElementById('answerText').innerText = `Last Answer: ${answer}`;
-                answersList.push({ question: questions[currentQuestionIndex], answer }); // Store question-answer pair
+                answersList.push({ question: questions[currentQuestionIndex], answer });
                 currentQuestionIndex++;
-                setTimeout(askQuestion, 2000); // Delay before next question
+                setTimeout(askQuestion, 2000);
             };
-    
+
             recognition.onerror = (event) => {
                 console.error("Speech recognition error:", event.error);
             };
-    
+
             recognition.start();
         }
-    
+
         async function startCamera() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const videoElement = document.getElementById('videoElement');
-                const loading = document.getElementById('loading');
-                loading.style.display = 'none';
+                document.getElementById('loading').style.display = 'none';
                 videoElement.srcObject = stream;
-    
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-    
-                setInterval(async () => {
-                    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-                    const imageData = canvas.toDataURL('image/jpeg');
-                    await analyzeEmotion(imageData);
-                }, 1000);
-    
             } catch (err) {
                 console.error('Error accessing the camera:', err);
                 alert('Camera access denied or failed.');
             }
         }
-    
-        async function analyzeEmotion(imageData) {
-            try {
-                const response = await fetch('/applicant/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image: imageData })
-                });
-    
-                const result = await response.json();
-                if (response.ok) {
-                    emotionsData.push(result.extended_emotion);
-                    document.getElementById('emotionText').innerHTML = `Emotion: ${result.extended_emotion}`;
-                } else {
-                    console.error('Error analyzing emotion:', result.error);
-                }
-            } catch (error) {
-                console.error('Error sending image to server:', error);
-            }
-        }
-    
-        function computeAverageEmotion() {
-            if (emotionsData.length === 0) return 'Neutral';
-            const emotionCounts = {};
-            emotionsData.forEach(emotion => {
-                emotionCounts[emotion] = (emotionCounts[emotion] || 0) + 1;
-            });
-            return Object.keys(emotionCounts).reduce((a, b) => emotionCounts[a] > emotionCounts[b] ? a : b);
-        }
-    
+
         async function postInterviewData() {
-            const averageEmotion = computeAverageEmotion();
             const interviewData = {
-                averageEmotion,
-                answers: answersList // Post all collected answers
+                answers: answersList
             };
-    
+
             try {
-                const response = await fetch('/applicant/save_interview_data/'+companyname+'/'+listingid, {
+                const response = await fetch(`/applicant/save_interview_data/${companyname}/${listingid}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(interviewData)
                 });
-    
+
                 if (response.ok) {
                     alert("Interview data successfully saved.");
-                    window.location.href = '/applicant/dashboard'; // Redirect to dashboard
+                    window.location.href = '/applicant/dashboard';
                 } else {
                     alert("Failed to save interview data.");
                 }
@@ -159,7 +136,7 @@
                 console.error("Error posting interview data:", error);
             }
         }
-    
+
         function stopListening() {
             if (recognition) {
                 recognition.stop();
@@ -167,7 +144,7 @@
                 postInterviewData();
             }
         }
-    
+
         window.onload = function () {
             startCamera();
             document.getElementById('startButton').onclick = askQuestion;

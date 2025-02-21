@@ -5,42 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #e5e7eb;
+            font-family: 'Poppins', sans-serif;
+        }
+        header {
+            background-color: #1f2937;
+        }
+        .container {
+            background-color: #1e293b;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
-
-    <div class="container mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
-        <h1 class="text-4xl font-bold text-gray-800 mb-6">Resume Analysis Report</h1>
-
+<body class="font-sans leading-normal tracking-normal">
+    <header class="py-4 px-6 shadow-md">
+        <nav class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">HRAI Dashboard</h1>
+            <ul class="flex space-x-6">
+                <li><a href="/" class="hover:text-yellow-400">Overview</a></li>
+                <li><a href="#" class="hover:text-yellow-400">Applicants</a></li>
+                <li><a href="#" class="hover:text-yellow-400">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container mx-auto my-10 p-6 shadow-lg rounded-lg">
+        <h1 class="text-4xl font-bold mb-6">📄 Resume Analysis Report</h1>
         <section class="mb-8">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Rating</h2>
-            <p class="text-lg text-gray-600">Rating: <span class="font-bold">{{data["rating"]}}/10</span></p>
+            <h2 class="text-2xl font-semibold mb-2">⭐ Rating</h2>
+            <p class="text-lg">Rating: <span class="font-bold">{{data["rating"]}}/10</span></p>
         </section>
-
         <section class="mb-8">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Strengths</h2>
-            <ul class="list-disc list-inside text-gray-600">
+            <h2 class="text-2xl font-semibold mb-2">💪 Strengths</h2>
+            <ul class="list-disc list-inside">
                {% for i in data["strengths"] %}
-                    <li>{{ i }}</li>
+                    <li>✅ {{ i }}</li>
                {% endfor %}
             </ul>
         </section>
-
         <section class="mb-8">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Weaknesses</h2>
-            <ul class="list-disc list-inside text-gray-600">
+            <h2 class="text-2xl font-semibold mb-2">⚠️ Weaknesses</h2>
+            <ul class="list-disc list-inside">
                 {% for i in data["weaknesses"] %}
-                    <li>{{ i }}</li>
+                    <li>❌ {{ i }}</li>
                {% endfor %}
             </ul>
         </section>
-
         <section>
-            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Recommendation</h2>
-            <p class="text-gray-600">
-                {{ data["recommendation"] }}
-            </p>
+            <h2 class="text-2xl font-semibold mb-2">📌 Recommendation</h2>
+            <p>💡 {{ data["recommendation"] }}</p>
         </section>
     </div>
-
 </body>
 </html>

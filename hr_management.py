@@ -126,6 +126,8 @@ class HR:
 
 # Example usage
 if __name__ == "__main__":
+    pass
+    '''
     # HR manager usage
     hr_manager = HR()
     
@@ -176,3 +178,4 @@ if __name__ == "__main__":
 
     # Close the HR manager (if necessary)
     hr_manager.close()
+    '''

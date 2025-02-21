@@ -1,6 +1,7 @@
 # importing needed modules
 from flask import Flask
 from flask import render_template, request, session, redirect, url_for, jsonify, Response
+from flask import send_from_directory
 from werkzeug.utils import secure_filename
 # all user defined modules
 from user_management import Users
@@ -26,7 +27,7 @@ app.secret_key = "shss!thisisasecretkey."
 # Configure upload folder and allowed extensions
 UPLOAD_FOLDER = 'uploads'  # You can change this to any path you want
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = {"pdf", "docx", "txt"}
+ALLOWED_EXTENSIONS = {"pdf", "docx", "txt", "jpg", "jpeg", "png"}
 
 # Other configurations
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # Set max upload size to 16MB
@@ -85,7 +86,7 @@ emotion_mappings = {
 # landing page
 @app.route("/")
 def landing():
-    return render_template('landing.html')
+    return render_template('newlanding.html')
 
 @app.route('/privacy')
 def privacy_policy():
@@ -102,7 +103,7 @@ def terms_of_service():
 @app.route('/add/company', methods=["GET", "POST"])
 def add_company():
     if request.method == "GET":
-        return render_template("company_registration.html")
+        return render_template("new_company_registration.html")
     else:
         name = request.form.get('name')
         ty = request.form.get('type')
@@ -125,7 +126,7 @@ def signup():
         usertype = "hr"
         if request.method == "GET":
             session["company"] = ""
-            return render_template("signup.html", usertype=usertype)
+            return render_template("newsignup.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")
@@ -149,7 +150,7 @@ def hr_login():
         usertype = "hr"
         session["company"] = ""
         if request.method == "GET":
-            return render_template("login.html", usertype=usertype)
+            return render_template("newlogin.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")
@@ -293,7 +294,7 @@ def applicant_signup():
     if session["applicant"] == False:
         usertype = "applicant"
         if request.method == "GET":
-            return render_template("signup.html", usertype=usertype)
+            return render_template("newsignup.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")
@@ -307,7 +308,7 @@ def applicant_signup():
                 session["user-email"] = ""
                 return "Retry Again!"
     else:
-        return redirect("/applicant/slide")
+        return redirect("/applicant/dashboard")
 
 # applicant login page
 @app.route("/applicant/login", methods=["GET", "POST"])
@@ -318,7 +319,7 @@ def applicant_login():
     if session["applicant"] == False:
         usertype = "applicant"
         if request.method == "GET":
-            return render_template("login.html", usertype=usertype)
+            return render_template("newlogin.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")
@@ -341,27 +342,32 @@ def applicant_logout():
     print(f"Session Applicant Status: {session['applicant']}")
     return redirect(url_for("landing"))
 
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory("uploads", filename)
+
 @app.route("/applicant/details", methods=["GET", "POST"])
 def applicant_details():
-    if session["applicant"] == True:
+    if session.get("applicant"):
         if request.method == "GET":
             u = Users()
             uid = str(u.get_id(session["user-email"]))
             json_data = read_json("users.json")
             
-            if str(uid) in [i for i in json_data]:
+            if uid in json_data:
                 return render_template("applicant_details.html", email=session["user-email"], data=json_data[uid])
             else:
                 data = {
-                "name": "",
-                "email": "",
-                "phone": "",
-                "location": "",
-                "skills": "",
-                "enrolled": []
-            }
+                    "name": "",
+                    "email": "",
+                    "phone": "",
+                    "location": "",
+                    "skills": "",
+                    "profile_pic": "",
+                    "enrolled": []
+                }
                 return render_template("applicant_details.html", email=session["user-email"], data=data)
-           
+
         elif request.method == "POST":
             data = {
                 "name": request.form.get("name"),
@@ -369,65 +375,74 @@ def applicant_details():
                 "phone": request.form.get("phone"),
                 "location": request.form.get("location"),
                 "skills": request.form.get("skills"),
-                "enrolled": []
+                "enrolled": {}
             }
             user_resume = request.files.get("resume")
+            user_profile_pic = request.files.get("profile_pic")
 
-            # users database
+            # Users database
             u = Users()
-            print(session["user-email"])
             uid = u.get_id(session["user-email"])
 
-            # save resume file
+            # Save resume file
             if user_resume and allowed_file(user_resume.filename):
-                # Create uploads folder if it doesn't exist
                 if not os.path.exists(app.config["UPLOAD_FOLDER"]):
                     os.makedirs(app.config["UPLOAD_FOLDER"])
                 
-                # Save the file with user-defined name
                 file_extension = os.path.splitext(user_resume.filename)[1]
                 saved_filename = f"{uid}_resume{file_extension}"
                 save_path = os.path.join(app.config["UPLOAD_FOLDER"], saved_filename)
                 try:
                     user_resume.save(save_path)
-                    data["resume_path"] = save_path
+                    data["resume_path"] = saved_filename
                 except Exception as e:
                     return {"error": f"File saving failed: {str(e)}"}, 500
-            else:
-                return {"error": "Invalid file type or missing file"}, 400
             
+            # Save profile picture
+            if user_profile_pic and allowed_file(user_profile_pic.filename):
+                if not os.path.exists(app.config["UPLOAD_FOLDER"]):
+                    os.makedirs(app.config["UPLOAD_FOLDER"])
+                
+                pic_extension = os.path.splitext(user_profile_pic.filename)[1]
+                profile_filename = f"{uid}_profile{pic_extension}"
+                profile_path = os.path.join(app.config["UPLOAD_FOLDER"], profile_filename)
+                try:
+                    user_profile_pic.save(profile_path)
+                    data["profile_pic"] = profile_filename
+                except Exception as e:
+                    return {"error": f"Profile picture saving failed: {str(e)}"}, 500
+
             # Save user data to JSON file
             json_data = read_json("users.json")
-            if str(uid) in [i for i in json_data]:
-                json_data[str(uid)]["name"] = data["name"]
-                json_data[str(uid)]["email"] = data["email"]
-                json_data[str(uid)]["phone"] = data["phone"]
-                json_data[str(uid)]["location"] = data["location"]
-                json_data[str(uid)]["skills"] = data["skills"]
-                json_data[str(uid)]["enrolled"] = json_data[str(uid)]["enrolled"]
-                write_json("users.json", json_data)
+            if str(uid) in json_data:
+                json_data[str(uid)].update(data)
             else:
                 json_data[str(uid)] = data
-                write_json("users.json", json_data)
-            
-            # analyze the resume here and store the data in resume_analyze.json
-            r = ResumeAnalyzer()
-            t = r.extract_text(save_path)
-            d = r.analyze(t)
+            write_json("users.json", json_data)
 
-            r_data = read_json("resume_analyze.json")
-            r_data[str(uid)] = d
-            write_json("resume_analyze.json", r_data)
+            # Analyze the resume and store the data
+            if "resume_path" in data:
+                r = ResumeAnalyzer()
+                t = r.extract_text(save_path)
+                d = r.analyze(t)
+
+                r_data = read_json("resume_analyze.json")
+                r_data[str(uid)] = d
+                write_json("resume_analyze.json", r_data)
 
             return redirect(url_for("applicant_dashboard"))
     else:
         return redirect(url_for("applicant_login"))
-
+    
 @app.route("/applicant/dashboard")
 def applicant_dashboard():
     openings = Openings()
     data = openings.get_all()
-    return render_template("applicant_dashboard.html", data=data)
+    u = Users()
+    uid = str(u.get_id(session["user-email"]))
+    json_data = read_json("users.json")
+    
+    return render_template("applicant_dashboard.html", data=data, json_data=json_data[uid])
 
 @app.route("/applicant/slide/<companyname>/<listingid>")
 def applicant_slide(companyname, listingid):
@@ -501,7 +516,7 @@ def applicant_qna(companyname, listingid):
         
         write_json("users.json", json_data)
         # return redirect(f"/applicant/submit-answer/{companyname}/{listingid}", code=307)
-        return redirect(f"applicant/video_interview/{companyname}/{listingid}")
+        return redirect(f"/applicant/video_interview/{companyname}/{listingid}")
 
 # @app.route('/applicant/submit-answer/<companyname>/<listingid>', methods=["POST"])
 # def applicant_submit(companyname, listingid):
@@ -520,7 +535,41 @@ def applicant_qna(companyname, listingid):
 
 @app.route('/applicant/video_interview/<companyname>/<listingid>')
 def video_interview(companyname, listingid):
-    questions = ["tell me your name?", "why are you applying for job?", "where do you see yourself 5 years from now?"]
+    # questions = ["tell me your name?", "why are you applying for job?", "where do you see yourself 5 years from now?"]
+    openings = Openings()
+    data = openings.get_all()
+    data = data[companyname][listingid]
+    q = QnA(job_title=data["user_role"], job_description=data["description"])
+    question_asked = []
+
+    #question to ask
+    question_to_ask = 3
+
+    for i in range(question_to_ask):
+        quest = q.generate_video_question(question_asked)
+        print(quest)
+        question_asked.append(quest['question'])
+    questions = []
+    c = 1
+    for i in question_asked:
+        questions.append(i)
+        c+=1
+    print(questions)
+    # # users database
+    # u = Users()
+    # # print(session["user-email"])
+    # uid = u.get_id(session["user-email"])
+
+    # json_data = read_json("users.json")
+    # # print(json_data)
+    # questi = {}
+    # for question in questions:
+    #     questi[questions[question]] = "" 
+    # # print(questi)
+    # json_data[str(uid)]["enrolled"][companyname] = {listingid: questi}
+    # write_json("users.json", json_data)
+
+    # openings.enroll_user(str(uid), companyname, listingid)
     return render_template("video_interview.html", questions=questions, companyname=companyname, listingid=listingid)
 
 @app.route('/applicant/save_interview_data/<companyname>/<listingid>', methods=['POST'])

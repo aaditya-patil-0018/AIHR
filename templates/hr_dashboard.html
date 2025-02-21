@@ -5,164 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRAI | HR Dashboard</title>
     <link rel="icon" href="/static/images/logo.png" type="image/icon type">
-    <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="/static/css/output.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8fafc;
+            background-color: #000000;
+            color: #ffffff;
         }
-        /* Fade-in animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 1s forwards ease-in-out;
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 16px;
+            transition: transform 0.3s ease-in-out;
+            min-height: 150px;
         }
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        /* Slide-in animation for cards */
-        .slide-in-right {
-            opacity: 0;
-            transform: translateX(100px);
-            animation: slideInRight 1s forwards ease-in-out;
-        }
-        @keyframes slideInRight {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        /* Button Hover Animation */
-        button:hover {
-            background-color: #1d4ed8;
-            transform: rotate(-2deg);
-        }
-        /* Underline Animation for Links */
-        .underline-link {
-            position: relative;
-        }
-        .underline-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            left: 0;
-            bottom: -2px;
-            background-color: #facc15;
-            transition: width 0.3s ease-in-out;
-        }
-        .underline-link:hover:after {
-            width: 100%;
-        }
-        /* Hover Effect for Cards */
         .card:hover {
             transform: scale(1.05);
-            background-color: #e0f2fe;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+            border-radius: 12px;
+            width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .modal input, .modal select, .modal textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            outline: none;
+        }
+        .modal button {
+            background-color: #4c5caf;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .modal button:hover {
+            background-color: #5f6cd1;
         }
     </style>
-
-    <link rel="stylesheet" href="/static/css/output.css">
 </head>
 <body>
-    <!-- Main Wrapper -->
     <div class="min-h-screen flex flex-col">
-
-        <!-- Navigation Bar -->
-        <header class="bg-stone-200 text-black py-4 px-6 shadow-md">
+        <header class="bg-gray-900 py-4 px-6 shadow-md">
             <nav class="container mx-auto flex justify-between items-center">
                 <h1 class="text-3xl font-bold tracking-wide">HRAI Dashboard</h1>
                 <ul class="flex space-x-6">
-                    <li><a href="/" class="hover:text-yellow-400 transition-colors duration-200 underline-link">Overview</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 transition-colors duration-200 underline-link">Applicants</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 transition-colors duration-200 underline-link">Settings</a></li>
+                    <li><a href="/" class="hover:text-yellow-400 transition-colors">Overview</a></li>
+                    <li><a href="#" class="hover:text-yellow-400 transition-colors">Applicants</a></li>
+                    <li><a href="#" class="hover:text-yellow-400 transition-colors">Settings</a></li>
                 </ul>
             </nav>
         </header>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 container mx-auto py-16 px-6 fade-in">
-            <h2 class="text-3xl font-semibold text-gray-800 mb-8">HR Job Openings</h2>
-
+        <main class="flex-1 container mx-auto py-16 px-6">
+            <h2 class="text-3xl font-semibold mb-8">HR Job Openings</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="job-list">
-                <!-- Dynamic Job Cards will be injected here -->
                 {% for i in data %}
                     <a href="/hr/applicants/{{company}}/{{i}}">
-                        <div class="bg-white p-6 rounded-lg shadow-lg card cursor-pointer transition-all duration-300 slide-in-right">
-                            <div class="flex flex-col justify-center">
-                                <p class="text-lg font-semibold text-indigo-600">{{data[i]['user_role']}}</p>
-                                <p class="text-gray-500">
-                                    {{data[i]['type']}} 
-                                    | 
-                                    {% if data[i]['status'] == 'Open' %}
-                                        <span class="text-green-600">
-                                    {% else %}    
-                                        <span class="text-red-600">
-                                    {% endif %}
-                                        {{data[i]['status']}}
-                                    </span> 
-                                    | 
-                                    <span class="text-black">
-                                        {% if data[i]['users_enrolled'] == 0 %}
-                                            {{data[i]['users_enrolled']}}
-                                        {% endif %}
-                                        {% if data[i]['users_enrolled'] != 0 %}
-                                            {{data[i]['users_enrolled'] | length}}
-                                        {% endif %}
-                                    </span>
-                                </p>
-                                <p class="mt-2">{{data[i]["description"]}}</p>
-                            </div>
+                        <div class="card">
+                            <p class="text-lg font-semibold text-indigo-400">{{data[i]['user_role']}}</p>
+                            <p>
+                                {{data[i]['type']}} | 
+                                <span class="{% if data[i]['status'] == 'Open' %}text-green-400{% else %}text-red-400{% endif %}">
+                                    {{data[i]['status']}}
+                                </span> |
+                                <span>
+                                    {% if data[i]['users_enrolled'] == 0 %} 0 {% else %} {{data[i]['users_enrolled'] | length}} {% endif %}
+                                </span>
+                            </p>
+                            <p class="mt-2">{{data[i]["description"]}}</p>
                         </div>
                     </a>
                 {% endfor %}
-
-                <!-- Add New Job Card -->
-                <div class="bg-white p-6 rounded-lg shadow-lg card cursor-pointer transition-all duration-300 slide-in-right"
-                    onclick="document.getElementById('jobFormModal').classList.remove('hidden');">
-                    <div class="flex flex-col items-center justify-center">
-                        <img src="/static/images/add-icon.png" class="w-12 mb-4" alt="Add Job Icon">
-                        <p class="text-lg font-semibold text-indigo-600">Add New Job Opening</p>
-                    </div>
+                <div class="card cursor-pointer flex items-center justify-center" onclick="document.getElementById('jobFormModal').classList.remove('hidden');">
+                    <p class="text-lg font-semibold text-indigo-400">+ Add New Job</p>
                 </div>
             </div>
         </main>
-       
-        <!-- Job Opening Form Modal -->
-        <div id="jobFormModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center fade-in">
-            <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div id="jobFormModal" class="hidden fixed inset-0 flex justify-center items-center">
+            <div class="modal">
                 <h2 class="text-xl font-bold mb-4">Add New Job Opening</h2>
-                <form action="/hr/dashboard" method="POST" id="jobForm">
-                    <div class="mb-4">
-                        <label for="title" class="block text-gray-700 font-medium mb-2">Job Title</label>
-                        <input type="text" name="title" id="title" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="type" class="block text-gray-700 font-medium mb-2">Job Type</label>
-                        <select name="type" id="type" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <option value="Full-Time">Full Time</option>
-                            <option value="Part-Time">Part Time</option>
-                            <option value="Internship">Internship</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="description" class="block text-gray-700 font-medium mb-2">Job Description</label>
-                        <textarea name="description" id="description" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="requirements" class="block text-gray-700 font-medium mb-2">Requirements</label>
-                        <textarea name="requirements" id="requirements" rows="3" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-                    </div>
-                    <div class="flex justify-end space-x-4">
-                        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-lg" onclick="document.getElementById('jobFormModal').classList.add('hidden');">Cancel</button>
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg">Create Job</button>
+                <form action="/hr/dashboard" method="POST">
+                    <input type="text" name="title" placeholder="Job Title">
+                    <select name="type">
+                        <option value="Full-Time">Full Time</option>
+                        <option value="Part-Time">Part Time</option>
+                        <option value="Internship">Internship</option>
+                    </select>
+                    <textarea name="description" rows="4" placeholder="Job Description"></textarea>
+                    <textarea name="requirements" rows="3" placeholder="Requirements"></textarea>
+                    <div class="flex justify-end space-x-4 mt-4">
+                        <button type="button" onclick="document.getElementById('jobFormModal').classList.add('hidden');">Cancel</button>
+                        <button type="submit">Create Job</button>
                     </div>
                 </form>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

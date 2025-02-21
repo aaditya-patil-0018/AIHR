@@ -9,101 +9,67 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f8fafc;
+            background: #121212;
+            color: #fff;
         }
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 1s forwards ease-in-out;
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .btn-primary {
+            background-color: #6B46C1;
+            transition: all 0.3s ease-in-out;
         }
-        table {
-            border-collapse: separate;
-            border-spacing: 0 10px;
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #9F7AEA, #B794F4);
         }
     </style>
 </head>
-<body class="bg-f8fafc">
+<body class="bg-black">
 
     <!-- Header -->
-    <header class="bg-stone-200 text-black py-4 px-6 shadow-md">
+    <header class="glass py-4 px-6 mb-6">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-bold tracking-wide">Job Dashboard</h1>
+            <h1 class="text-3xl font-bold">Job Dashboard</h1>
             <nav>
-                <ul class="flex space-x-6">
-                    <li><a href="/" class="underline-link">Home</a></li>
-                    <li><a href="/applicant/details" class="underline-link">Profile</a></li>
+                <ul class="flex items-center justify-center space-x-6">
+                    <li><a href="/" class="text-purple-300 hover:text-purple-500">Home</a></li>
+                    <li><a href="/applicant/details" class="text-purple-300 hover:text-purple-500">Profile</a></li>
+                    <li><img src="{{ url_for('uploaded_file', filename=json_data['profile_pic']) if json_data['profile_pic'] else '/static/default.png' }}" class="w-10 h-10 rounded-full shadow-md" alt="Profile Picture"></li>
+                    <li><a href="/applicant/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="container mx-auto py-8 px-4 fade-in">
+    <main class="container mx-auto py-8 px-4">
         <!-- Filters Section -->
-        <section class="bg-white shadow rounded-lg p-4 mb-6">
+        <section class="glass p-6 mb-6">
             <form class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Search -->
-                <div>
-                    <input type="text" id="search" name="search"
-                           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-950"
-                           placeholder="Search jobs or companies">
-                </div>
-                <!-- Job Type -->
-                <div>
-                    <select id="type" name="type"
-                            class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-950">
-                        <option value="">All Job Types</option>
-                        <option value="full-time">Full-Time</option>
-                        <option value="part-time">Part-Time</option>
-                        <option value="remote">Remote</option>
-                        <option value="internship">Internship</option>
-                    </select>
-                </div>
-                <!-- Location -->
-                <div>
-                    <input type="text" id="location" name="location"
-                           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-950"
-                           placeholder="City or State">
-                </div>
-                <!-- Filter Button -->
-                <div class="flex justify-end">
-                    <button type="button"
-                            class="w-full md:w-auto px-4 py-2 bg-blue-900 text-white rounded hover:bg-blue-800"
-                            onclick="filterJobs()">Filter</button>
-                </div>
+                <input type="text" id="search" name="search" class="w-full px-3 py-2 bg-transparent border border-gray-500 rounded focus:outline-none focus:ring-2 focus:ring-purple-400 text-white placeholder-gray-400" placeholder="Search jobs or companies">
+                <select id="type" name="type" class="w-full px-3 py-2 bg-transparent border border-gray-500 rounded focus:outline-none focus:ring-2 focus:ring-purple-400 text-white">
+                    <option value="">All Job Types</option>
+                    <option value="full-time">Full-Time</option>
+                    <option value="part-time">Part-Time</option>
+                    <option value="remote">Remote</option>
+                    <option value="internship">Internship</option>
+                </select>
+                <input type="text" id="location" name="location" class="w-full px-3 py-2 bg-transparent border border-gray-500 rounded focus:outline-none focus:ring-2 focus:ring-purple-400 text-white placeholder-gray-400" placeholder="City or State">
+                <button type="button" class="btn-primary px-4 py-2 text-white rounded w-full md:w-auto" onclick="filterJobs()">Filter</button>
             </form>
         </section>
 
-        <!-- Job Listings Table -->
-        <section class="bg-white shadow rounded-lg p-4">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Available Jobs</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-200">
-                        <tr class="bg-stone-200">
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-800">Job Title</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-800">Company</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-800">Description</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-800">Type</th>
-                            <th class="px-4 py-2 text-center text-sm font-semibold text-gray-800">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="job-listings">
-                        <!-- Dynamic job rows will be inserted here -->
-                    </tbody>
-                </table>
-            </div>
+        <!-- Job Listings Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="job-listings">
+            <!-- Dynamic job cards will be inserted here -->
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-stone-200 text-gray-800 py-4">
+    <footer class="glass text-gray-300 py-4 mt-6">
         <div class="container mx-auto text-center">
             <p class="text-sm">&copy; 2024 Job Dashboard. All rights reserved.</p>
         </div>
@@ -112,48 +78,39 @@
     <!-- JavaScript -->
     <script>
         const jobData = {{ data | tojson }};
-        
+
         function filterJobs() {
             const searchQuery = document.getElementById('search').value.toLowerCase();
             const selectedType = document.getElementById('type').value.toLowerCase();
             const locationQuery = document.getElementById('location').value.toLowerCase();
             const jobListings = document.getElementById('job-listings');
-            
-            jobListings.innerHTML = ''; // Clear the existing rows
+            jobListings.innerHTML = '';
             
             for (const company in jobData) {
                 for (const jobId in jobData[company]) {
                     const job = jobData[company][jobId];
-                    const matchesSearch = 
-                        job.user_role.toLowerCase().includes(searchQuery) ||
-                        company.toLowerCase().includes(searchQuery);
+                    const matchesSearch = job.user_role.toLowerCase().includes(searchQuery) || company.toLowerCase().includes(searchQuery);
                     const matchesType = !selectedType || job.type.toLowerCase() === selectedType;
                     const matchesLocation = !locationQuery || company.toLowerCase().includes(locationQuery);
-
+                    
                     if (matchesSearch && matchesType && matchesLocation) {
-                        const row = `
-                            <tr class="hover:bg-stone-100">
-                                <td class="px-4 py-2 text-sm text-gray-700">${job.user_role}</td>
-                                <td class="px-4 py-2 text-sm text-gray-700">${company}</td>
-                                <td class="px-4 py-2 text-sm text-gray-700">${job.description.slice(0, 30)}...</td>
-                                <td class="px-4 py-2 text-sm text-gray-700">${job.type}</td>
-                                <td class="px-4 py-2 text-center">
-                                    <a href="/applicant/slide/${company}/${jobId}">
-                                        <button class="px-3 py-1 bg-blue-900 text-white rounded hover:bg-blue-800">
-                                            Apply
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-
+                        const card = `
+                            <div class="glass p-6 rounded-lg">
+                                <h3 class="text-lg font-bold text-purple-300">${job.user_role}</h3>
+                                <p class="text-sm text-gray-400">${company}</p>
+                                <p class="mt-2 text-gray-300">${job.description.slice(0, 60)}...</p>
+                                <p class="mt-2 text-sm text-gray-400">Type: ${job.type}</p>
+                                <div class="mt-4">
+                                    <a href="/applicant/slide/${company}/${jobId}" class="btn-primary px-4 py-2 rounded text-white inline-block">Apply</a>
+                                </div>
+                            </div>
                         `;
-                        jobListings.insertAdjacentHTML('beforeend', row);
+                        jobListings.insertAdjacentHTML('beforeend', card);
                     }
                 }
             }
         }
 
-        // Initial load
         filterJobs();
     </script>
 </body>

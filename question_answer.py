@@ -25,6 +25,15 @@ class QnA:
         response = response.send_message(f"Ask me question very small but they should be very technical and job specific and tailored questions, which are not asked already, here's the list {questions_asked}. Just give me question and nothing else, send it to me in json format 'question'.").text.replace('```','').split(":")[-1].replace('"', '').replace("\n", "")[1:-2]
         # print(response)
         return {"question": response}
+    
+    def generate_video_question(self, questions_asked):
+        response = self.model.start_chat(
+        history=[
+                {"role": "user", "parts": f"Hello, I am the HR manager. I would like you to help me conduct a video interview for a {self.job_title} position. Here is the job description: {self.job_description}. Please ask the candidate relevant technical and job-specific questions related to video format. Focus on their ability to explain complex concepts clearly, demonstrate problem-solving approaches, and how they adapt to dynamic work situations. Start with a question that checks their understanding of the role and its responsibilities."}
+            ]
+        )
+        response = response.send_message(f"Ask me concise and specific questions related to {self.job_title} job, which assess their expertise and suitability for the role, avoiding questions already asked. Here's the list of questions asked: {questions_asked}. Just send me the question in JSON format 'question'.").text.replace('```','').split(":")[-1].replace('"', '').replace("\n", "")[1:-2]
+        return {"question": response}
 
     def analyse_response(self, data):
         response = self.model.start_chat(

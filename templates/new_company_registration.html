@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Registration - HRAI</title>
+    <link rel="icon" href="/static/images/logo.png" type="image/icon type">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #b3b3b3;
+        }
+        
+    </style>
+</head>
+<body class="flex flex-col items-center min-h-screen px-4">
+    <header class="bg-gray-900 text-white py-6 shadow-lg w-full">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-wide">HRAI Privacy Policy</h1>
+            <a href="/" class="text-yellow-400 font-medium hover:underline">Back to Home</a>
+        </div>
+    </header>
+    <div class="glass-container w-full max-w-3xl m-8">
+        <h1 class="text-3xl font-bold text-center mb-4">Register a New Company</h1>
+        <p class="text-center text-gray-300 mb-6">Provide accurate company details to complete the registration.</p>
+
+        <form action="/add/company" method="post" class="space-y-6">
+            <div>
+                <label for="name" class="block text-sm font-medium mb-2">Company Name</label>
+                <input type="text" name="name" id="name" required
+                       class="w-full px-4 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500"
+                       placeholder="e.g., TechCorp">
+            </div>
+            <div>
+                <label for="type" class="block text-sm font-medium mb-2">Company Type</label>
+                <select name="type" id="type" required
+                        class="w-full px-4 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500">
+                    <option value="" disabled selected>Select a type</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Retail">Retail</option>
+                </select>
+            </div>
+            <div>
+                <label for="website" class="block text-sm font-medium mb-2">Website</label>
+                <input type="url" name="website" id="website"
+                       class="w-full px-4 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500"
+                       placeholder="https://example.com">
+            </div>
+            <div>
+                <label for="description" class="block text-sm font-medium mb-2">Description</label>
+                <textarea name="description" id="description" rows="4" required
+                          class="w-full px-4 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500"
+                          placeholder="Briefly describe the company"></textarea>
+            </div>
+            <div>
+                <label for="size" class="block text-sm font-medium mb-2">Company Size (No. of Employees)</label>
+                <input type="number" name="size" id="size" min="1" required
+                       class="w-full px-4 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500"
+                       placeholder="e.g., 50">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="city" class="block text-sm font-medium mb-2">City</label>
+                    <input type="text" name="city" id="city" required
+                           class="w-full px-4 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500"
+                           placeholder="e.g., New York">
+                </div>
+                <div>
+                    <label for="state" class="block text-sm font-medium mb-2">State</label>
+                    <input type="text" name="state" id="state" required
+                           class="w-full px-4 py-3 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500"
+                           placeholder="e.g., NY">
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="w-full py-3 rounded-lg shadow-lg bg-purple-600">Register Company</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
