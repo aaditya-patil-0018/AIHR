@@ -82,7 +82,9 @@
             "description": "We need java backend developer Requirements: Should have base and strong foundation knowledge about Java Programming Language",
             "user_role": "Java Developer",
             "status": "Open",
-            "users_enrolled": []
+            "users_enrolled": [
+                "12"
+            ]
         }
     }
 }

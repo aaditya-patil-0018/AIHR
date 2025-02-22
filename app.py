@@ -544,7 +544,7 @@ def video_interview(companyname, listingid):
     question_asked = []
 
     #question to ask
-    question_to_ask = 3
+    question_to_ask = 5
 
     for i in range(question_to_ask):
         quest = q.generate_video_question(question_asked)

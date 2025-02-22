@@ -26,6 +26,18 @@
                     "video_interview_answers": [],
                     "recommend": "Please provide the questions and answers.\n"
                 }
+            },
+            "new test company": {
+                "1": {
+                    "What strategies do you employ to write unit tests for Java code, focusing on testability and code coverage": "something",
+                    "Explain your preferred approach to handling exceptions in a multi-threaded Java application, focusing on thread safety and performance": "sometghin",
+                    "Describe your experience with Java's streams API and how you've used it to improve the efficiency and readability of your code": "something",
+                    "Explain how you would design a thread-safe singleton in Java, considering potential performance implications": "something",
+                    "Describe a scenario where you had to refactor legacy Java code for improved performance. What techniques did you use, and what were the measurable results": "something",
+                    "average_emotion": null,
+                    "video_interview_answers": [],
+                    "recommend": "Please provide the questions and answers.\n"
+                }
             }
         },
         "profile_pic": "12_profile.jpg"

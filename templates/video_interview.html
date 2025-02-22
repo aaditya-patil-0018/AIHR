@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <p class="text-center text-lg mb-2">Time Left: <span id="timer" class="font-bold">2:00</span></p>
+        <p class="text-center text-lg mb-2">Time Left: <span id="timer" class="font-bold">5:00</span></p>
         <p id="emotionText" class="text-lg text-center mb-4">Waiting for question...</p>
 
         <div class="flex justify-center gap-4">
@@ -37,10 +37,11 @@
         const listingid = {{ listingid | tojson }};
         let currentQuestionIndex = 0;
         const answersList = [];
-        let timeLeft = 120;
+        let timeLeft = 300;
 
         function updateTimer() {
             const minutes = Math.floor(timeLeft / 60);
+            console.log(minutes);
             const seconds = timeLeft % 60;
             document.getElementById("timer").innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
             if (timeLeft <= 0) stopInterview();
