@@ -4,29 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume Analysis</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-color: #000000;
-            color: #e5e7eb;
+            background-color: #ffffff;
+            color: #1f2937;
             font-family: 'Poppins', sans-serif;
         }
         header {
-            background-color: #1f2937;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .container {
-            background-color: #1e293b;
+            background-color: #f3f4f6;
         }
     </style>
 </head>
 <body class="font-sans leading-normal tracking-normal">
     <header class="py-4 px-6 shadow-md">
-        <nav class="container mx-auto flex justify-between items-center">
+        <nav class="mx-auto flex justify-between items-center">
             <h1 class="text-3xl font-bold">HRAI Dashboard</h1>
             <ul class="flex space-x-6">
-                <li><a href="/" class="hover:text-yellow-400">Overview</a></li>
-                <li><a href="#" class="hover:text-yellow-400">Applicants</a></li>
-                <li><a href="#" class="hover:text-yellow-400">Settings</a></li>
+                <li><a href="/" class="hover:text-blue-500">Overview</a></li>
+                <li><a href="#" class="hover:text-blue-500">Applicants</a></li>
+                <li><a href="#" class="hover:text-blue-500">Settings</a></li>
+                <li><a href="/hr/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600">Logout</a></li>
             </ul>
         </nav>
     </header>

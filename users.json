@@ -29,5 +29,28 @@
             }
         },
         "profile_pic": "12_profile.jpg"
+    },
+    "19": {
+        "name": "newnew",
+        "email": "thisisnew@gmail.com",
+        "phone": "9876542310",
+        "location": "pune",
+        "skills": "python",
+        "enrolled": {
+            "IDK": {
+                "1": {
+                    "Describe a time you had to debug a particularly obscure software error. What was your process, and what tools did you utilize": "something",
+                    "Explain your experience with memory management in [Specific Programming Language relevant to the unknown job].  Provide a concrete example": "somethgin",
+                    "Describe a scenario where you optimized a slow database query. What techniques did you use, and what was the performance improvement": "sometghing",
+                    "[    Explain the difference between a left join and a right join in SQL, and provide a scenario where one would be preferred over the other.,    Describe your experience with different concurrency control mechanisms (e.g., locks, transactions) in a database system.,    How would you approach troubleshooting a network connectivity issue between two microservices?,    What are your preferred methods for unit testing and integration testing?,    Explain a time you had to refactor legacy code. What were the challenges, and how did you approach them?,    Describe your experience with version control systems, such as Git.  Give an example of a complex merge conflict you resolved.,    How familiar are you with different API design patterns (e.g., REST, GraphQL)?,    Explain your understanding of design patterns (e.g., Singleton, Factory, Observer) and when you'd apply each.,    What are your experiences with different queuing systems (e.g., RabbitMQ, Kafka)?,    Describe your experience with containerization technologies such as Docker and Kubernetes.  ": "sometghing",
+                    "[    What specific garbage collection algorithms are you familiar with in Java, and which would you choose for a high-throughput application versus a low-latency application?,    Explain the concept of 'deadlocks' in concurrent programming.  Give an example and a solution.,    How would you handle a situation where your microservice is experiencing high CPU utilization?,    Compare and contrast NoSQL and relational databases.  When would you choose one over the other?,    Describe your experience with implementing caching strategies (e.g., LRU, FIFO).  What are the trade-offs?,    How would you optimize a database query that involves a large JOIN operation?,    Explain your understanding of ACID properties in database transactions.,    What are the benefits and drawbacks of using message queues in a distributed system?,    Describe a time you used a profiler to identify a performance bottleneck in your code.,    In Git, how would you revert a specific commit without affecting subsequent commits?,    What are your experiences with different load balancing techniques?,    Explain your understanding of different database indexing strategies (e.g., B-tree, hash index).,    How would you design a REST API for a system with frequent updates and a large number of clients?,    How familiar are you with different authentication and authorization mechanisms (e.g., OAuth 2.0, JWT)?,    What are your experiences with security best practices in software development (e.g., input validation, SQL injection prevention)?  ": "sometghin",
+                    "average_emotion": null,
+                    "video_interview_answers": [],
+                    "recommend": "Please provide the questions and answers.\n"
+                }
+            }
+        },
+        "resume_path": "19_resume.pdf",
+        "profile_pic": "19_profile.jpg"
     }
 }

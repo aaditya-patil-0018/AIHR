@@ -45,7 +45,8 @@
             "user_role": "Something which idk",
             "status": "Open",
             "users_enrolled": [
-                "12"
+                "12",
+                "19"
             ]
         },
         "2": {
@@ -71,6 +72,15 @@
             "type": "Part-Time",
             "description": "we need a good developer Requirements: python developer",
             "user_role": "software developer",
+            "status": "Open",
+            "users_enrolled": []
+        }
+    },
+    "new test company": {
+        "1": {
+            "type": "Full-Time",
+            "description": "We need java backend developer Requirements: Should have base and strong foundation knowledge about Java Programming Language",
+            "user_role": "Java Developer",
             "status": "Open",
             "users_enrolled": []
         }

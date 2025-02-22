@@ -8,25 +8,28 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            color: white;
+            color: black;
+            background: #f9f9f9;
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 12px;
             padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
         .input-field {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ddd;
+            color: black;
         }
         .input-field::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
-<body class="font-sans bg-black">
-    <header class="bg-stone-900 text-white py-4 px-6 shadow-md">
+<body class="font-sans">
+    <header class="bg-white text-black py-4 px-6 shadow-md">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-3xl font-bold tracking-wide">Job Dashboard</h1>
             <nav>
@@ -41,13 +44,12 @@
     </header>
     <div class="max-w-4xl mx-auto mt-10 glass-card">
         <div class="text-center py-6">
-            <h1 class="text-2xl font-semibold text-purple-300">Applicant Profile</h1>
+            <h1 class="text-2xl font-semibold text-purple-700">Applicant Profile</h1>
         </div>
         <form class="space-y-6" action="/applicant/details" method="post" enctype="multipart/form-data">
             <div class="flex flex-col items-center">
                 <label for="profile_pic" class="cursor-pointer">
-                    <!-- <img id="profilePreview" src="uploads/{{ data['profile_pic'] }}" class="w-32 h-32 rounded-full border-4 border-white shadow-md" alt="Profile Picture"> -->
-                    <img id="profilePreview" src="{{ url_for('uploaded_file', filename=data['profile_pic']) }}" class="w-32 h-32 rounded-full border-4 border-white shadow-md" alt="Profile Picture">
+                    <img id="profilePreview" src="{{ url_for('uploaded_file', filename=data['profile_pic']) }}" class="w-32 h-32 rounded-full border-4 border-gray-300 shadow-md" alt="Profile Picture">
                 </label>
                 <input type="file" id="profile_pic" name="profile_pic" class="hidden" accept=".jpg,.jpeg,.png" onchange="previewProfilePic(event)">
             </div>
@@ -61,43 +63,43 @@
                 }
             </script>
             <div>
-                <h2 class="text-xl font-semibold mb-4 text-purple-300">Basic Information</h2>
+                <h2 class="text-xl font-semibold mb-4 text-purple-700">Basic Information</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-300">Full Name</label>
+                        <label for="name" class="block text-sm font-medium text-gray-800">Full Name</label>
                         <input type="text" id="name" name="name" placeholder="Enter your full name" required
                             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 ring-blue-500 focus:outline-none input-field" value={{data['name']}}>
                     </div>
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-300">Email Address</label>
+                        <label for="email" class="block text-sm font-medium text-gray-800">Email Address</label>
                         <input type="email" id="email" name="email" placeholder="Enter your email address"
                             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 ring-blue-500 focus:outline-none input-field" value={{email}}>
                     </div>
                     <div>
-                        <label for="phone" class="block text-sm font-medium text-gray-300">Phone Number</label>
+                        <label for="phone" class="block text-sm font-medium text-gray-800">Phone Number</label>
                         <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required
                             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 ring-blue-500 focus:outline-none input-field" value={{data['phone']}}>
                     </div>
                     <div>
-                        <label for="location" class="block text-sm font-medium text-gray-300">Location</label>
+                        <label for="location" class="block text-sm font-medium text-gray-800">Location</label>
                         <input type="text" id="location" name="location" placeholder="City, State" required
                             class="w-full mt-2 px-4 py-2 border rounded-lg focus:ring-2 ring-blue-500 focus:outline-none input-field" value={{data['location']}}>
                     </div>
                 </div>
             </div>
             <div>
-                <h2 class="text-xl font-semibold mb-4 text-purple-300">Resume</h2>
+                <h2 class="text-xl font-semibold mb-4 text-purple-700">Resume</h2>
                 <div class="flex flex-col items-center">
                     <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" class="w-full px-4 py-2 border rounded-lg focus:ring-2 ring-blue-500 focus:outline-none input-field">
                 </div>
             </div>
             <div>
-                <h2 class="text-xl font-semibold mb-4 text-purple-300">Skills</h2>
+                <h2 class="text-xl font-semibold mb-4 text-purple-700">Skills</h2>
                 <textarea id="skills" name="skills" placeholder="List your skills separated by commas (e.g., Python, JavaScript, SQL)"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-2 ring-blue-500 focus:outline-none input-field" rows="3">{{data["skills"]}}</textarea>
             </div>
             <div class="text-center">
-                <button type="submit" class="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:ring-2 ring-blue-500 focus:outline-none">
+                <button type="submit" class="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:ring-2 ring-blue-500 focus:outline-none">
                     Submit Application
                 </button>
             </div>

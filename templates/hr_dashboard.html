@@ -7,19 +7,20 @@
     <link rel="icon" href="/static/images/logo.png" type="image/icon type">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/output.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #000000;
-            color: #ffffff;
+            background-color: #f4f4f4;
+            color: #333;
         }
         .card {
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background-color: #ffffff;
             border-radius: 12px;
             padding: 16px;
             transition: transform 0.3s ease-in-out;
             min-height: 150px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .card:hover {
             transform: scale(1.05);
@@ -29,8 +30,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
+            background-color: #ffffff;
             padding: 20px;
             border-radius: 12px;
             width: 400px;
@@ -40,17 +40,19 @@
             width: 100%;
             padding: 10px;
             margin-top: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            background: #f4f4f4;
+            border: 1px solid #ccc;
             border-radius: 8px;
-            color: #ffffff;
+            color: #333;
             outline: none;
         }
         .modal button {
             background-color: #4c5caf;
+            color: white;
             padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
+            border: none;
         }
         .modal button:hover {
             background-color: #5f6cd1;
@@ -59,44 +61,45 @@
 </head>
 <body>
     <div class="min-h-screen flex flex-col">
-        <header class="bg-gray-900 py-4 px-6 shadow-md">
+        <header class="bg-white py-4 px-6 shadow-md">
             <nav class="container mx-auto flex justify-between items-center">
-                <h1 class="text-3xl font-bold tracking-wide">HRAI Dashboard</h1>
+                <h1 class="text-3xl font-bold tracking-wide text-gray-800">HRAI Dashboard</h1>
                 <ul class="flex space-x-6">
-                    <li><a href="/" class="hover:text-yellow-400 transition-colors">Overview</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 transition-colors">Applicants</a></li>
-                    <li><a href="#" class="hover:text-yellow-400 transition-colors">Settings</a></li>
+                    <li><a href="/" class="hover:text-indigo-500 transition-colors">Overview</a></li>
+                    <li><a href="#" class="hover:text-indigo-500 transition-colors">Applicants</a></li>
+                    <li><a href="#" class="hover:text-indigo-500 transition-colors">Settings</a></li>
+                    <li><a href="/hr/logout" class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600">Logout</a></li>
                 </ul>
             </nav>
         </header>
         <main class="flex-1 container mx-auto py-16 px-6">
-            <h2 class="text-3xl font-semibold mb-8">HR Job Openings</h2>
+            <h2 class="text-3xl font-semibold mb-8 text-gray-800">HR Job Openings</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="job-list">
                 {% for i in data %}
                     <a href="/hr/applicants/{{company}}/{{i}}">
                         <div class="card">
-                            <p class="text-lg font-semibold text-indigo-400">{{data[i]['user_role']}}</p>
+                            <p class="text-lg font-semibold text-indigo-600">{{data[i]['user_role']}}</p>
                             <p>
                                 {{data[i]['type']}} | 
-                                <span class="{% if data[i]['status'] == 'Open' %}text-green-400{% else %}text-red-400{% endif %}">
+                                <span class="{% if data[i]['status'] == 'Open' %}text-green-500{% else %}text-red-500{% endif %}">
                                     {{data[i]['status']}}
                                 </span> |
                                 <span>
                                     {% if data[i]['users_enrolled'] == 0 %} 0 {% else %} {{data[i]['users_enrolled'] | length}} {% endif %}
                                 </span>
                             </p>
-                            <p class="mt-2">{{data[i]["description"]}}</p>
+                            <p class="mt-2 text-gray-600">{{data[i]["description"]}}</p>
                         </div>
                     </a>
                 {% endfor %}
                 <div class="card cursor-pointer flex items-center justify-center" onclick="document.getElementById('jobFormModal').classList.remove('hidden');">
-                    <p class="text-lg font-semibold text-indigo-400">+ Add New Job</p>
+                    <p class="text-lg font-semibold text-indigo-600">+ Add New Job</p>
                 </div>
             </div>
         </main>
         <div id="jobFormModal" class="hidden fixed inset-0 flex justify-center items-center">
             <div class="modal">
-                <h2 class="text-xl font-bold mb-4">Add New Job Opening</h2>
+                <h2 class="text-xl font-bold mb-4 text-gray-800">Add New Job Opening</h2>
                 <form action="/hr/dashboard" method="POST">
                     <input type="text" name="title" placeholder="Job Title">
                     <select name="type">

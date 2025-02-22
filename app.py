@@ -86,7 +86,7 @@ emotion_mappings = {
 # landing page
 @app.route("/")
 def landing():
-    return render_template('newlanding.html')
+    return render_template('landing.html')
 
 @app.route('/privacy')
 def privacy_policy():
@@ -103,7 +103,7 @@ def terms_of_service():
 @app.route('/add/company', methods=["GET", "POST"])
 def add_company():
     if request.method == "GET":
-        return render_template("new_company_registration.html")
+        return render_template("company_registration.html")
     else:
         name = request.form.get('name')
         ty = request.form.get('type')
@@ -126,14 +126,14 @@ def signup():
         usertype = "hr"
         if request.method == "GET":
             session["company"] = ""
-            return render_template("newsignup.html", usertype=usertype)
+            return render_template("signup.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")
             password = request.form.get("password")
             if user.signup(email, password, usertype):
                 session[usertype] = True
-                return redirect(url_for("hr_dashboard"))
+                return redirect(url_for("hr_registration"))
             else:
                 session[usertype] = False
                 return "Retry Again!"
@@ -150,7 +150,7 @@ def hr_login():
         usertype = "hr"
         session["company"] = ""
         if request.method == "GET":
-            return render_template("newlogin.html", usertype=usertype)
+            return render_template("login.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")
@@ -288,13 +288,14 @@ def delete_job(job_id):
 # applicant signup page
 @app.route("/applicant/signup", methods=["GET", "POST"])
 def applicant_signup():
+    print(session["applicant"])
     if "applicant" not in session:
         session["applicant"] = False 
         session["user-email"] = ""
     if session["applicant"] == False:
         usertype = "applicant"
         if request.method == "GET":
-            return render_template("newsignup.html", usertype=usertype)
+            return render_template("signup.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")
@@ -302,7 +303,7 @@ def applicant_signup():
             if user.signup(email, password, usertype):
                 session[usertype] = True
                 session["user-email"] = email
-                return redirect('/applicant/dashboard')
+                return redirect('/applicant/details')
             else:
                 session[usertype] = False
                 session["user-email"] = ""
@@ -319,7 +320,7 @@ def applicant_login():
     if session["applicant"] == False:
         usertype = "applicant"
         if request.method == "GET":
-            return render_template("newlogin.html", usertype=usertype)
+            return render_template("login.html", usertype=usertype)
         elif request.method == "POST":
             user = Users()
             email = request.form.get("email")

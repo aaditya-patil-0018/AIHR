@@ -10,54 +10,57 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #0f172a;
-            color: #e2e8f0;
+            background-color: #ffffff;
+            color: #333333;
         }
         .glass {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4 bg-black">
+<body class="flex items-center justify-center min-h-screen p-4 bg-gray-100">
     <div class="glass shadow-lg rounded-lg p-8 max-w-md w-full">
-        <h1 class="text-2xl font-semibold text-white mb-4">Job Details</h1>
+        <h1 class="text-2xl font-semibold text-gray-900 mb-4">Job Details</h1>
         <div class="space-y-4">
             <div>
-                <p class="text-gray-300 text-sm font-medium">Company:</p>
-                <p class="text-lg font-semibold text-white">{{companyname}}</p>
+                <p class="text-gray-600 text-sm font-medium">Company:</p>
+                <p class="text-lg font-semibold text-gray-900">{{companyname}}</p>
             </div>
             <div>
-                <p class="text-gray-300 text-sm font-medium">Position:</p>
-                <p class="text-lg font-semibold text-white">{{data["user_role"]}}</p>
+                <p class="text-gray-600 text-sm font-medium">Position:</p>
+                <p class="text-lg font-semibold text-gray-900">{{data["user_role"]}}</p>
             </div>
             <div>
-                <p class="text-gray-300 text-sm font-medium">Type:</p>
-                <p class="text-lg font-semibold text-white">{{data["type"]}}</p>
+                <p class="text-gray-600 text-sm font-medium">Type:</p>
+                <p class="text-lg font-semibold text-gray-900">{{data["type"]}}</p>
             </div>
             <div>
-                <p class="text-gray-300 text-sm font-medium">Description:</p>
-                <p class="text-gray-300">{{data["description"]}}</p>
+                <p class="text-gray-600 text-sm font-medium">Description:</p>
+                <p class="text-gray-700">{{data["description"]}}</p>
             </div>
             <div>
-                <p class="text-gray-300 text-sm font-medium">Status:</p>
-                <p class="text-lg font-semibold text-{{ 'red-400' if status == 'Closed' else 'green-400' }}">{{data["status"]}}</p>
+                <p class="text-gray-600 text-sm font-medium">Status:</p>
+                <p class="text-lg font-semibold text-{{ 'red-500' if status == 'Closed' else 'green-500' }}">{{data["status"]}}</p>
             </div>
             <div>
-                <p class="text-gray-300 text-sm font-medium">Applicants Enrolled:</p>
-                <p class="text-lg font-semibold text-white">{{data["users_enrolled"]|length}}</p>
+                <p class="text-gray-600 text-sm font-medium">Applicants Enrolled:</p>
+                <p class="text-lg font-semibold text-gray-900">{{data["users_enrolled"]|length}}</p>
             </div>
         </div>
         {% if uid in data["users_enrolled"] %}
             <div class="mt-6">
-                <button class="w-full bg-gray-600 text-white py-2 rounded-lg transition">
+                <button class="w-full bg-gray-400 text-white py-2 rounded-lg transition">
                     Applied
                 </button>
             </div>
         {% endif %}
         {% if uid not in data["users_enrolled"] %}
             <div class="mt-6">
-                <button class="w-full bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-700 transition" onclick="location.href='/applicant/qna/{{companyname}}/{{listingid}}';">
+                <button class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-500 transition" onclick="location.href='/applicant/qna/{{companyname}}/{{listingid}}';">
                     Apply Now
                 </button>
             </div>
