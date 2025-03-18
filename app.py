@@ -3,6 +3,13 @@ from flask import Flask
 from flask import render_template, request, session, redirect, url_for, jsonify, Response
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
+
+from flask_socketio import SocketIO, emit
+import speech_recognition as sr
+import base64
+import io
+from pydub import AudioSegment
+
 # all user defined modules
 from user_management import Users
 from hr_management import HR
@@ -23,6 +30,29 @@ from deepface import DeepFace
 # flask object
 app = Flask(__name__)
 app.secret_key = "shss!thisisasecretkey."
+socketio = SocketIO(app)
+
+@socketio.on('audio')
+def handle_audio(data):
+    audio_data = base64.b64decode(data.split(',')[1])  # Decode base64 audio
+    audio_file = io.BytesIO(audio_data)
+    
+    # Convert audio to WAV format (required by SpeechRecognition)
+    sound = AudioSegment.from_file(audio_file, format="webm")
+    sound.export("temp.wav", format="wav")
+
+    # Speech recognition
+    recognizer = sr.Recognizer()
+    with sr.AudioFile("temp.wav") as source:
+        audio = recognizer.record(source)
+
+    try:
+        text = recognizer.recognize_google(audio)
+        emit('text_response', text)  # Send recognized text back to the browser
+    except sr.UnknownValueError:
+        emit('text_response', "Couldn't recognize speech")
+    except sr.RequestError:
+        emit('text_response', "Speech recognition service error")
 
 # Configure upload folder and allowed extensions
 UPLOAD_FOLDER = 'uploads'  # You can change this to any path you want
@@ -288,7 +318,7 @@ def delete_job(job_id):
 # applicant signup page
 @app.route("/applicant/signup", methods=["GET", "POST"])
 def applicant_signup():
-    print(session["applicant"])
+    # print(session["applicant"])
     if "applicant" not in session:
         session["applicant"] = False 
         session["user-email"] = ""
@@ -573,6 +603,10 @@ def video_interview(companyname, listingid):
     # openings.enroll_user(str(uid), companyname, listingid)
     return render_template("video_interview.html", questions=questions, companyname=companyname, listingid=listingid)
 
+@app.route("/video")
+def video():
+    return render_template("video.html")
+
 @app.route('/applicant/save_interview_data/<companyname>/<listingid>', methods=['POST'])
 def save_interview_data(companyname, listingid):
     data = request.json
@@ -673,4 +707,5 @@ def analyze():
 # main function #
 #################
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True, port=5001)
+    socketio.run(app, debug=True, port=5001)

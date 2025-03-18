@@ -66,14 +66,18 @@
             "description": "Coder Requirements: Java Developers",
             "user_role": "First Opening",
             "status": "Open",
-            "users_enrolled": []
+            "users_enrolled": [
+                "12"
+            ]
         },
         "2": {
             "type": "Part-Time",
             "description": "we need a good developer Requirements: python developer",
             "user_role": "software developer",
             "status": "Open",
-            "users_enrolled": []
+            "users_enrolled": [
+                "12"
+            ]
         }
     },
     "new test company": {

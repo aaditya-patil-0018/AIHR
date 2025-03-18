@@ -38,6 +38,31 @@
                     "video_interview_answers": [],
                     "recommend": "Please provide the questions and answers.\n"
                 }
+            },
+            "WNS": {
+                "1": {
+                    "Describe your experience with Java's concurrency utilities, specifically focusing on situations where you've used `CompletableFuture` to optimize asynchronous operations": "something",
+                    "Can you detail a scenario where using `CompletableFuture.anyOf()` or `CompletableFuture.allOf()` proved more efficient than a simple `ExecutorService` for handling multiple asynchronous tasks?  Focus on the specific performance gains": "something",
+                    "In a multithreaded Java application, how would you handle exceptions thrown within a `CompletableFuture` to prevent them from silently failing and ensure appropriate logging or error handling": "something",
+                    "Explain your experience with Java's `ForkJoinPool` and how you've leveraged it to parallelize computationally intensive tasks.  Provide a concrete example": "something",
+                    "Have you used CompletableFuture's `exceptionally()` method? Describe a situation where it was crucial in your application's error handling": "something\r\n",
+                    "average_emotion": null,
+                    "video_interview_answers": [
+                        {
+                            "question": "Describe a time you had to debug a particularly complex Java code issue.  Walk me through your problem-solving process, including the tools and techniques you used",
+                            "answer": "I pretty hope I pretty hope"
+                        },
+                        {
+                            "question": "Explain the differences between HashMap and TreeMap in Java, and describe a scenario where you would choose one over the other, justifying your decision",
+                            "answer": "I am damn happy that this code works"
+                        },
+                        {
+                            "question": "Describe a situation where you had to refactor legacy Java code. What were the challenges, your approach, and the outcome?  Focus on your decision-making process in prioritizing refactoring tasks",
+                            "answer": "I won't tell you"
+                        }
+                    ],
+                    "recommend": "Please provide the questions and answers.\n"
+                }
             }
         },
         "profile_pic": "12_profile.jpg"

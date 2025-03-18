@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Recognition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <h1 class="text-2xl font-bold mb-4">What's Your Name?</h1>
+        <button id="startButton" class="bg-green-500 text-white px-4 py-2 rounded">🎤 Start Listening</button>
+        
+        <p class="mt-4 font-semibold">Your Name: <span id="result" class="text-blue-600"></span></p>
+    </div>
+
+    <script>
+        const socket = io();
+
+        document.getElementById("startButton").onclick = async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mediaRecorder = new MediaRecorder(stream);
+            const chunks = [];
+
+            mediaRecorder.ondataavailable = (event) => chunks.push(event.data);
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: "audio/webm" });
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    socket.emit("audio", reader.result);
+                };
+                reader.readAsDataURL(blob);
+            };
+
+            mediaRecorder.start();
+            setTimeout(() => mediaRecorder.stop(), 5000); // Stop after 5 seconds
+        };
+
+        socket.on("text_response", (text) => {
+            document.getElementById("result").innerText = text;
+        });
+    </script>
+</body>
+</html>
